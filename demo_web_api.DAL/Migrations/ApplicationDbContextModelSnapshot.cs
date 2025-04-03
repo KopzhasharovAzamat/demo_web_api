@@ -24,11 +24,9 @@ namespace demo_web_api.DAL.Migrations
 
             modelBuilder.Entity("demo_web_api.DAL.Entities.Company", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -41,11 +39,9 @@ namespace demo_web_api.DAL.Migrations
 
             modelBuilder.Entity("demo_web_api.DAL.Entities.Employee", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -70,17 +66,15 @@ namespace demo_web_api.DAL.Migrations
 
             modelBuilder.Entity("demo_web_api.DAL.Entities.Project", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("ContractorCompanyId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("ContractorCompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CustomerCompanyId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CustomerCompanyId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
@@ -92,8 +86,8 @@ namespace demo_web_api.DAL.Migrations
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProjectManagerId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("ProjectManagerId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
@@ -111,11 +105,11 @@ namespace demo_web_api.DAL.Migrations
 
             modelBuilder.Entity("demo_web_api.DAL.Entities.ProjectEmployee", b =>
                 {
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ProjectId", "EmployeeId");
 

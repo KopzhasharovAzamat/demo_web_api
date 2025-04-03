@@ -15,7 +15,7 @@ public class CompanyRepository : ICompanyRepository {
         return await _dbContext.Companies.ToListAsync();
     }
 
-    public async Task<Company?> GetCompanyByIdAsync(int id) {
+    public async Task<Company?> GetCompanyByIdAsync(Guid id) {
         return await _dbContext.Companies.FirstOrDefaultAsync(x => x.Id == id);
     }
 
@@ -29,7 +29,7 @@ public class CompanyRepository : ICompanyRepository {
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task DeleteCompanyAsync(int id) {
+    public async Task DeleteCompanyAsync(Guid id) {
         var company = await _dbContext.Companies.FindAsync(id);
         if (company != null) {
             _dbContext.Companies.Remove(company);

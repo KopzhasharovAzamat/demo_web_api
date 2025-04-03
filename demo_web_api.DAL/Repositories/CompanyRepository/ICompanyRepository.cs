@@ -4,8 +4,8 @@ namespace demo_web_api.DAL.Repositories.CompanyRepository;
 
 public interface ICompanyRepository {
     Task<List<Company>> GetAllCompaniesAsync();
-    Task<Company?> GetCompanyByIdAsync(int id);
+    Task<Company?> GetCompanyByIdAsync(Guid id);
     Task AddCompanyAsync(Company company);
     Task UpdateCompanyAsync(Company company);
-    Task DeleteCompanyAsync(int id);
+    Task DeleteCompanyAsync(Guid id);
 }

@@ -4,8 +4,8 @@ namespace demo_web_api.DAL.Repositories.EmployeeRepository;
 
 public interface IEmployeeRepository {
     Task<List<Employee>> GetAllEmployeesAsync();
-    Task<Employee?> GetEmployeeByIdAsync(int id);
+    Task<Employee?> GetEmployeeByIdAsync(Guid id);
     Task AddEmployeeAsync(Employee employee);
     Task UpdateEmployeeAsync(Employee employee);
-    Task DeleteEmployeeAsync(int id);
+    Task DeleteEmployeeAsync(Guid id);
 }

@@ -4,8 +4,8 @@ namespace demo_web_api.DAL.Repositories.ProjectRepository;
 
 public interface IProjectRepository {
     Task<List<Project>> GetAllProjectsAsync();
-    Task<Project?> GetProjectByIdAsync(int id);
+    Task<Project?> GetProjectByIdAsync(Guid id);
     Task AddProjectAsync(Project project);
     Task UpdateProjectAsync(Project project);
-    Task DeleteProjectAsync(int id);
+    Task DeleteProjectAsync(Guid id);
 }

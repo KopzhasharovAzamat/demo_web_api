@@ -18,7 +18,7 @@ public class ProjectRepository : IProjectRepository {
             .ToListAsync();
     }
 
-    public async Task<Project?> GetProjectByIdAsync(int id) {
+    public async Task<Project?> GetProjectByIdAsync(Guid id) {
         return await _dbContext.Projects
             .Include(x => x.ProjectEmployees)
             .ThenInclude(x => x.Employee)
@@ -35,7 +35,7 @@ public class ProjectRepository : IProjectRepository {
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task DeleteProjectAsync(int id) {
+    public async Task DeleteProjectAsync(Guid id) {
         var project = await _dbContext.Projects.FindAsync(id);
         if (project != null) {
             _dbContext.Projects.Remove(project);
