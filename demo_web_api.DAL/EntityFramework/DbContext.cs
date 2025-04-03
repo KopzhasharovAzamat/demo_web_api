@@ -27,5 +27,18 @@ public class ApplicationDbContext : DbContext {
             .HasOne(x => x.Employee)
             .WithMany(x => x.ProjectEmployees)
             .HasForeignKey(x => x.EmployeeId);
+
+        modelBuilder.Entity<Project>()
+            .HasOne(p => p.CustomerCompany)
+            .WithMany()
+            .HasForeignKey(p => p.CustomerCompanyId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        modelBuilder.Entity<Project>()
+            .HasOne(p => p.ContractorCompany)
+            .WithMany()
+            .HasForeignKey(p => p.ContractorCompanyId)
+            .OnDelete(DeleteBehavior.NoAction);
+
     }
 }
