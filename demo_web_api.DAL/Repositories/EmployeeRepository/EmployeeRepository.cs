@@ -20,12 +20,12 @@ public class EmployeeRepository : IEmployeeRepository {
     }
 
     public async Task AddEmployeeAsync(Employee employee) {
-        _dbContext.Add(employee);
+        _dbContext.Employees.Add(employee);
         await _dbContext.SaveChangesAsync();
     }
 
     public async Task UpdateEmployeeAsync(Employee employee) {
-        _dbContext.Update(employee);
+        _dbContext.Employees.Update(employee);
         await _dbContext.SaveChangesAsync();
     }
 
