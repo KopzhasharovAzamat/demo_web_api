@@ -4,10 +4,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.13.35806.99
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demo_web_api", "demo_web_api\demo_web_api.csproj", "{CCF4F9BA-45F6-406E-94C6-1912346A6F78}"
+	ProjectSection(ProjectDependencies) = postProject
+		{215FB9E5-829D-441E-863C-849A8A98B9D6} = {215FB9E5-829D-441E-863C-849A8A98B9D6}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demo_web_api.DAL", "demo_web_api.DAL\demo_web_api.DAL.csproj", "{61035A3E-FA55-424D-93F4-CD6C7F5F4E3F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demo_web_api.BLL", "demo_web_api.BLL\demo_web_api.BLL.csproj", "{F163D372-331D-4E18-8FBB-770C76765131}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demo_web_api.PL", "demo_web_api.PL\demo_web_api.PL.csproj", "{215FB9E5-829D-441E-863C-849A8A98B9D6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F163D372-331D-4E18-8FBB-770C76765131} = {F163D372-331D-4E18-8FBB-770C76765131}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +35,10 @@ Global
 		{F163D372-331D-4E18-8FBB-770C76765131}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F163D372-331D-4E18-8FBB-770C76765131}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F163D372-331D-4E18-8FBB-770C76765131}.Release|Any CPU.Build.0 = Release|Any CPU
+		{215FB9E5-829D-441E-863C-849A8A98B9D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{215FB9E5-829D-441E-863C-849A8A98B9D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{215FB9E5-829D-441E-863C-849A8A98B9D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{215FB9E5-829D-441E-863C-849A8A98B9D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
