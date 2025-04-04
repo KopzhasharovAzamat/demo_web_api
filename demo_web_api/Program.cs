@@ -1,3 +1,5 @@
+using demo_web_api.BLL.Interfaces;
+using demo_web_api.BLL.Services;
 using demo_web_api.DAL.EntityFramework;
 using demo_web_api.DAL.Interfaces;
 using demo_web_api.DAL.Repositories;
@@ -14,6 +16,10 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+
+builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<ICompanyService, CompanyService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
