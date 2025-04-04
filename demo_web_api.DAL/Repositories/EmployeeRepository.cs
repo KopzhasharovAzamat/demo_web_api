@@ -1,8 +1,9 @@
 ﻿using demo_web_api.DAL.Entities;
 using demo_web_api.DAL.EntityFramework;
+using demo_web_api.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace demo_web_api.DAL.Repositories.EmployeeRepository;
+namespace demo_web_api.DAL.Repositories;
 
 public class EmployeeRepository : IEmployeeRepository {
     private readonly ApplicationDbContext _dbContext;

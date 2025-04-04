@@ -1,8 +1,6 @@
 using demo_web_api.DAL.EntityFramework;
-using demo_web_api.DAL.Repositories.CompanyRepository;
-using demo_web_api.DAL.Repositories.EmployeeRepository;
-using demo_web_api.DAL.Repositories.ProjectRepository;
-using demo_web_api.DAL.UnitOfWork;
+using demo_web_api.DAL.Interfaces;
+using demo_web_api.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

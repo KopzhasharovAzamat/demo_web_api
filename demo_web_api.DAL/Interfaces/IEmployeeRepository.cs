@@ -1,6 +1,6 @@
 ﻿using demo_web_api.DAL.Entities;
 
-namespace demo_web_api.DAL.Repositories.EmployeeRepository;
+namespace demo_web_api.DAL.Interfaces;
 
 public interface IEmployeeRepository {
     Task<List<Employee>> GetAllEmployeesAsync();

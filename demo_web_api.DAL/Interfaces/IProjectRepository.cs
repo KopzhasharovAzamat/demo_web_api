@@ -1,6 +1,6 @@
 ﻿using demo_web_api.DAL.Entities;
 
-namespace demo_web_api.DAL.Repositories.ProjectRepository;
+namespace demo_web_api.DAL.Interfaces;
 
 public interface IProjectRepository {
     Task<List<Project>> GetAllProjectsAsync();

@@ -1,8 +1,9 @@
 ﻿using demo_web_api.DAL.Entities;
 using demo_web_api.DAL.EntityFramework;
+using demo_web_api.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace demo_web_api.DAL.Repositories.CompanyRepository;
+namespace demo_web_api.DAL.Repositories;
 
 public class CompanyRepository : ICompanyRepository {
     private readonly ApplicationDbContext _dbContext;

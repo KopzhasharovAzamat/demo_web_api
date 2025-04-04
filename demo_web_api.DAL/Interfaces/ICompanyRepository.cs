@@ -1,6 +1,6 @@
 ﻿using demo_web_api.DAL.Entities;
 
-namespace demo_web_api.DAL.Repositories.CompanyRepository;
+namespace demo_web_api.DAL.Interfaces;
 
 public interface ICompanyRepository {
     Task<List<Company>> GetAllCompaniesAsync();

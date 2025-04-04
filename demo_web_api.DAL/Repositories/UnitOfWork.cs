@@ -1,9 +1,7 @@
 ﻿using demo_web_api.DAL.EntityFramework;
-using demo_web_api.DAL.Repositories.CompanyRepository;
-using demo_web_api.DAL.Repositories.EmployeeRepository;
-using demo_web_api.DAL.Repositories.ProjectRepository;
+using demo_web_api.DAL.Interfaces;
 
-namespace demo_web_api.DAL.UnitOfWork;
+namespace demo_web_api.DAL.Repositories;
 
 public class UnitOfWork : IUnitOfWork {
     private readonly ApplicationDbContext _dbContext;

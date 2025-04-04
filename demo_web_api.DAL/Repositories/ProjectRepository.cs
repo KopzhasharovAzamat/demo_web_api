@@ -1,8 +1,9 @@
 ﻿using demo_web_api.DAL.Entities;
 using demo_web_api.DAL.EntityFramework;
+using demo_web_api.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace demo_web_api.DAL.Repositories.ProjectRepository;
+namespace demo_web_api.DAL.Repositories;
 
 public class ProjectRepository : IProjectRepository {
     private readonly ApplicationDbContext _dbContext;
