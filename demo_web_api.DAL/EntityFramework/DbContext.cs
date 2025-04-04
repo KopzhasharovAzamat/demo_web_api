@@ -39,6 +39,5 @@ public class ApplicationDbContext : DbContext {
             .WithMany()
             .HasForeignKey(p => p.ContractorCompanyId)
             .OnDelete(DeleteBehavior.NoAction);
-
     }
 }
