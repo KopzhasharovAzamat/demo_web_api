@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace demo_web_api.Controllers;
 
+[ApiController]
+[Route("api/[controller]")]
 public class CompaniesController : ControllerBase {
     private readonly ICompanyService _companyService;
 
@@ -16,9 +18,11 @@ public class CompaniesController : ControllerBase {
     public async Task<IActionResult> GetAllCompanies() {
         var companies = await _companyService.GetAllCompaniesAsync();
         var result = companies.Select(
-            x => new CompanyDto {
-                Name = x.Name
-            }
+            company
+                => new CompanyDto {
+                    Id   = company.Id,
+                    Name = company.Name
+                }
         );
 
         return Ok(result);

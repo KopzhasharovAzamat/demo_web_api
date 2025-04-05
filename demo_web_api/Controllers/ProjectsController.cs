@@ -18,15 +18,15 @@ public class ProjectsController : ControllerBase {
     public async Task<IActionResult> GetAllProjects() {
         var projects = await _projectService.GetAllProjectsAsync();
         var result = projects.Select(
-            p => new ProjectDto {
-                Id                  = p.Id,
-                Name                = p.Name,
-                CustomerCompanyId   = p.CustomerCompanyId,
-                ContractorCompanyId = p.ContractorCompanyId,
-                StartDate           = p.StartDate,
-                EndDate             = p.EndDate,
-                Priority            = p.Priority,
-                ProjectManagerId    = p.ProjectManagerId
+            project => new ProjectDto {
+                Id                  = project.Id,
+                Name                = project.Name,
+                CustomerCompanyId   = project.CustomerCompanyId,
+                ContractorCompanyId = project.ContractorCompanyId,
+                StartDate           = project.StartDate,
+                EndDate             = project.EndDate,
+                Priority            = project.Priority,
+                ProjectManagerId    = project.ProjectManagerId
             }
         );
 

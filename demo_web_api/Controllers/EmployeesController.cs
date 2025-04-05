@@ -18,12 +18,12 @@ public class EmployeesController : ControllerBase {
     public async Task<IActionResult> GetAllEmployees() {
         var employees = await _employeeService.GetAllEmployeesAsync();
         var result = employees.Select(
-            x => new EmployeeDto {
-                Id         = x.Id,
-                FirstName  = x.FirstName,
-                LastName   = x.LastName,
-                MiddleName = x.MiddleName,
-                Email      = x.Email
+            employee => new EmployeeDto {
+                Id         = employee.Id,
+                FirstName  = employee.FirstName,
+                LastName   = employee.LastName,
+                MiddleName = employee.MiddleName,
+                Email      = employee.Email
             }
         );
 
