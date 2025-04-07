@@ -8,4 +8,5 @@ public interface IEmployeeRepository {
     Task AddEmployeeAsync(Employee employee);
     Task UpdateEmployeeAsync(Employee employee);
     Task DeleteEmployeeAsync(Guid id);
+    Task<Employee?> GetEmployeeByEmailAsync(string email);
 }

@@ -1,6 +1,7 @@
 ﻿using demo_web_api.BLL.Interfaces;
 using demo_web_api.DAL.Entities;
 using demo_web_api.DAL.Interfaces;
+using demo_web_api.DAL.Repositories;
 
 namespace demo_web_api.BLL.Services;
 
@@ -29,5 +30,9 @@ public class EmployeeService : IEmployeeService {
 
     public async Task DeleteEmployeeAsync(Guid id) {
         await _unitOfWork.Employees.DeleteEmployeeAsync(id);
+    }
+
+    public async Task<Employee?> GetEmployeeByEmailAsync(string email) {
+        return await _unitOfWork.Employees.GetEmployeeByEmailAsync(email);
     }
 }

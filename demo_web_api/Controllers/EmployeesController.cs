@@ -2,6 +2,7 @@
 using demo_web_api.DAL.Entities;
 using demo_web_api.PL.DTOs;
 using demo_web_api.ViewModels;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace demo_web_api.Controllers;
@@ -9,10 +10,12 @@ namespace demo_web_api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 public class EmployeesController : ControllerBase {
-    private readonly IEmployeeService _employeeService;
+    private readonly IEmployeeService        _employeeService;
+    private readonly IValidator<EmployeeDto> _employeeValidator;
 
-    public EmployeesController(IEmployeeService employeeService) {
-        _employeeService = employeeService;
+    public EmployeesController(IEmployeeService employeeService, IValidator<EmployeeDto> employeeValidator) {
+        _employeeService   = employeeService;
+        _employeeValidator = employeeValidator;
     }
 
     [HttpGet]
@@ -50,6 +53,11 @@ public class EmployeesController : ControllerBase {
 
     [HttpPost]
     public async Task<IActionResult> CreateEmployee(EmployeeDto employeeDto) {
+        var validationResult = await _employeeValidator.ValidateAsync(employeeDto);
+        if (!validationResult.IsValid) {
+            return BadRequest(validationResult.Errors);
+        }
+
         var newEmployee = new Employee {
             Id         = Guid.NewGuid(),
             LastName   = employeeDto.LastName,
@@ -64,6 +72,11 @@ public class EmployeesController : ControllerBase {
 
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateEmployee(Guid id, EmployeeDto employeeDto) {
+        var validationResult = await _employeeValidator.ValidateAsync(employeeDto);
+        if (!validationResult.IsValid) {
+            return BadRequest(validationResult.Errors);
+        }
+
         var existingEmployee = await _employeeService.GetEmployeeByIdAsync(id);
         if (existingEmployee is null) {
             return NotFound();

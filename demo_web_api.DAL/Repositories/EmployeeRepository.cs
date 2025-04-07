@@ -37,4 +37,8 @@ public class EmployeeRepository : IEmployeeRepository {
             await _dbContext.SaveChangesAsync();
         }
     }
+
+    public async Task<Employee?> GetEmployeeByEmailAsync(string email) {
+        return await _dbContext.Employees.FirstOrDefaultAsync(x => x.Email == email);
+    }
 }

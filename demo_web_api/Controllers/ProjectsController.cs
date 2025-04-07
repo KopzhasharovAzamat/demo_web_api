@@ -2,6 +2,7 @@
 using demo_web_api.DAL.Entities;
 using demo_web_api.PL.DTOs;
 using demo_web_api.ViewModels;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace demo_web_api.Controllers;
@@ -9,10 +10,12 @@ namespace demo_web_api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 public class ProjectsController : ControllerBase {
-    private readonly IProjectService _projectService;
+    private readonly IProjectService        _projectService;
+    private readonly IValidator<ProjectDto> _projectValidator;
 
-    public ProjectsController(IProjectService projectService) {
-        _projectService = projectService;
+    public ProjectsController(IProjectService projectService, IValidator<ProjectDto> projectValidator) {
+        _projectService   = projectService;
+        _projectValidator = projectValidator;
     }
 
     [HttpGet]
@@ -56,6 +59,11 @@ public class ProjectsController : ControllerBase {
 
     [HttpPost]
     public async Task<IActionResult> CreateProject(ProjectDto projectDto) {
+        var validationResult = await _projectValidator.ValidateAsync(projectDto);
+        if (!validationResult.IsValid) {
+            return BadRequest(validationResult.Errors);
+        }
+
         var newProject = new Project {
             Id                  = Guid.NewGuid(),
             Name                = projectDto.Name,
@@ -74,6 +82,11 @@ public class ProjectsController : ControllerBase {
 
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateProject(Guid id, ProjectDto projectDto) {
+        var validationResult = await _projectValidator.ValidateAsync(projectDto);
+        if (!validationResult.IsValid) {
+            return BadRequest(validationResult.Errors);
+        }
+
         var existingProject = await _projectService.GetProjectByIdAsync(id);
         if (existingProject == null) {
             return NotFound();
