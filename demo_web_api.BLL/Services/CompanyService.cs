@@ -21,13 +21,16 @@ public class CompanyService : ICompanyService {
 
     public async Task AddCompanyAsync(Company company) {
         await _unitOfWork.Companies.AddCompanyAsync(company);
+        await _unitOfWork.SaveAsync();
     }
 
     public async Task UpdateCompanyAsync(Company company) {
         await _unitOfWork.Companies.UpdateCompanyAsync(company);
+        await _unitOfWork.SaveAsync();
     }
 
     public async Task DeleteCompanyAsync(Guid id) {
         await _unitOfWork.Companies.DeleteCompanyAsync(id);
+        await _unitOfWork.SaveAsync();
     }
 }

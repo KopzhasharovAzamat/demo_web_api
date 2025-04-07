@@ -21,13 +21,16 @@ public class ProjectService : IProjectService {
 
     public async Task AddProjectAsync(Project project) {
         await _unitOfWork.Projects.AddProjectAsync(project);
+        await _unitOfWork.SaveAsync();
     }
 
     public async Task UpdateProjectAsync(Project project) {
         await _unitOfWork.Projects.UpdateProjectAsync(project);
+        await _unitOfWork.SaveAsync();
     }
 
     public async Task DeleteProjectAsync(Guid id) {
         await _unitOfWork.Projects.DeleteProjectAsync(id);
+        await _unitOfWork.SaveAsync();
     }
 }

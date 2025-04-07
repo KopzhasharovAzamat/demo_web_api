@@ -1,0 +1,6 @@
+﻿namespace demo_web_api.DTOs;
+
+public class ProjectEmployeeDto {
+    public Guid ProjectId  { get; set; }
+    public Guid EmployeeId { get; set; }
+}

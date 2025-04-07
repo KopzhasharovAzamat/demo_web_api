@@ -22,14 +22,17 @@ public class EmployeeService : IEmployeeService {
 
     public async Task AddEmployeeAsync(Employee employee) {
         await _unitOfWork.Employees.AddEmployeeAsync(employee);
+        await _unitOfWork.SaveAsync();
     }
 
     public async Task UpdateEmployeeAsync(Employee employee) {
         await _unitOfWork.Employees.UpdateEmployeeAsync(employee);
+        await _unitOfWork.SaveAsync();
     }
 
     public async Task DeleteEmployeeAsync(Guid id) {
         await _unitOfWork.Employees.DeleteEmployeeAsync(id);
+        await _unitOfWork.SaveAsync();
     }
 
     public async Task<Employee?> GetEmployeeByEmailAsync(string email) {

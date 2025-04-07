@@ -41,4 +41,8 @@ public class EmployeeRepository : IEmployeeRepository {
     public async Task<Employee?> GetEmployeeByEmailAsync(string email) {
         return await _dbContext.Employees.FirstOrDefaultAsync(x => x.Email == email);
     }
+
+    public async Task<bool> EmployeeExistsAsync(Guid id) {
+        return await _dbContext.Employees.AnyAsync(x => x.Id == id);
+    }
 }

@@ -5,6 +5,7 @@ using demo_web_api.BLL.Services;
 using demo_web_api.DAL.EntityFramework;
 using demo_web_api.DAL.Interfaces;
 using demo_web_api.DAL.Repositories;
+using demo_web_api.DTOs;
 using Microsoft.EntityFrameworkCore;
 using demo_web_api.ViewModels;
 
@@ -18,6 +19,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 builder.Services.AddScoped<IValidator<EmployeeDto>, EmployeeValidator>();
 builder.Services.AddScoped<IValidator<ProjectDto>, ProjectValidator>();
 builder.Services.AddScoped<IValidator<CompanyDto>, CompanyValidator>();
+builder.Services.AddScoped<IValidator<ProjectEmployeeDto>, ProjectEmployeeValidator>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();

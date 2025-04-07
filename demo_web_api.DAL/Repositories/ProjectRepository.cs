@@ -43,4 +43,8 @@ public class ProjectRepository : IProjectRepository {
             await _dbContext.SaveChangesAsync();
         }
     }
+
+    public async Task<bool> ProjectExistsAsync(Guid id) {
+        return await _dbContext.Projects.AnyAsync(x => x.Id == id);
+    }
 }
