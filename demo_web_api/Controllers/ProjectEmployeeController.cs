@@ -21,7 +21,7 @@ public class ProjectEmployeeController : ControllerBase {
         _projectEmployeeValidator = projectEmployeeValidator;
     }
 
-    [HttpPost]
+    [HttpPost("assign")]
     public async Task<IActionResult> AssignEmployee(ProjectEmployeeDto projectEmployeeDto) {
         var validationResult = await _projectEmployeeValidator.ValidateAsync(projectEmployeeDto);
         if (!validationResult.IsValid) {
@@ -36,7 +36,7 @@ public class ProjectEmployeeController : ControllerBase {
         return Ok("Employee assigned to project.");
     }
 
-    [HttpPost]
+    [HttpPost("remove")]
     public async Task<IActionResult> RemoveEmployee(ProjectEmployeeDto projectEmployeeDto) {
         var validationResult = await _projectEmployeeValidator.ValidateAsync(projectEmployeeDto);
         if (!validationResult.IsValid) {
