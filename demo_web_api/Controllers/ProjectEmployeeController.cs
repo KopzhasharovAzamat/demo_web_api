@@ -1,5 +1,7 @@
 ﻿using demo_web_api.BLL.Interfaces;
 using demo_web_api.DTOs;
+using demo_web_api.Validation;
+using demo_web_api.ViewModels;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,15 +22,31 @@ public class ProjectEmployeeController : ControllerBase {
     }
 
     [HttpPost]
-    public async Task<IActionResult> AssignEmployee(ProjectEmployeeDto model) {
-        await _projectEmployeeService.AssignEmployeeToProjectAsync(model.ProjectId, model.EmployeeId);
+    public async Task<IActionResult> AssignEmployee(ProjectEmployeeDto projectEmployeeDto) {
+        var validationResult = await _projectEmployeeValidator.ValidateAsync(projectEmployeeDto);
+        if (!validationResult.IsValid) {
+            return BadRequest(validationResult.Errors);
+        }
+
+        await _projectEmployeeService.AssignEmployeeToProjectAsync(
+            projectEmployeeDto.ProjectId,
+            projectEmployeeDto.EmployeeId
+        );
 
         return Ok("Employee assigned to project.");
     }
 
     [HttpPost]
-    public async Task<IActionResult> RemoveEmployee(ProjectEmployeeDto model) {
-        await _projectEmployeeService.RemoveEmployeeFromProjectAsync(model.ProjectId, model.EmployeeId);
+    public async Task<IActionResult> RemoveEmployee(ProjectEmployeeDto projectEmployeeDto) {
+        var validationResult = await _projectEmployeeValidator.ValidateAsync(projectEmployeeDto);
+        if (!validationResult.IsValid) {
+            return BadRequest(validationResult.Errors);
+        }
+
+        await _projectEmployeeService.RemoveEmployeeFromProjectAsync(
+            projectEmployeeDto.ProjectId,
+            projectEmployeeDto.EmployeeId
+        );
 
         return Ok("Employee removed from project.");
     }
