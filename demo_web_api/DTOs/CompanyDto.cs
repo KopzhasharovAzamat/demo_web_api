@@ -1,6 +1,5 @@
-﻿namespace demo_web_api.PL.DTOs;
+﻿namespace demo_web_api.ViewModels;
 
 public class CompanyDto {
-    public Guid   Id   { get; set; }
     public string Name { get; set; }
 }

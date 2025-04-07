@@ -1,6 +1,7 @@
 ﻿using demo_web_api.BLL.Interfaces;
 using demo_web_api.DAL.Entities;
 using demo_web_api.PL.DTOs;
+using demo_web_api.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace demo_web_api.Controllers;
@@ -19,7 +20,7 @@ public class CompaniesController : ControllerBase {
         var companies = await _companyService.GetAllCompaniesAsync();
         var result = companies.Select(
             company
-                => new CompanyDto {
+                => new CompanyVm {
                     Id   = company.Id,
                     Name = company.Name
                 }
@@ -34,7 +35,7 @@ public class CompaniesController : ControllerBase {
 
         if (existingCompany is null) return NotFound();
 
-        var foundCompany = new CompanyDto() {
+        var foundCompany = new CompanyVm() {
             Id   = existingCompany.Id,
             Name = existingCompany.Name
         };

@@ -1,6 +1,7 @@
-﻿namespace demo_web_api.ViewModels;
+﻿namespace demo_web_api.PL.DTOs;
 
-public class EmployeeDto {
+public class EmployeeVm {
+    public Guid   Id         { get; set; }
     public string FirstName  { get; set; }
     public string LastName   { get; set; }
     public string MiddleName { get; set; }

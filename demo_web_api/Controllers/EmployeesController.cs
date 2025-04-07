@@ -1,6 +1,7 @@
 ﻿using demo_web_api.BLL.Interfaces;
 using demo_web_api.DAL.Entities;
 using demo_web_api.PL.DTOs;
+using demo_web_api.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace demo_web_api.Controllers;
@@ -18,7 +19,7 @@ public class EmployeesController : ControllerBase {
     public async Task<IActionResult> GetAllEmployees() {
         var employees = await _employeeService.GetAllEmployeesAsync();
         var result = employees.Select(
-            employee => new EmployeeDto {
+            employee => new EmployeeVm {
                 Id         = employee.Id,
                 FirstName  = employee.FirstName,
                 LastName   = employee.LastName,
@@ -36,7 +37,7 @@ public class EmployeesController : ControllerBase {
 
         if (existingEmployee is null) return NotFound();
 
-        var foundEmployee = new EmployeeDto() {
+        var foundEmployee = new EmployeeVm() {
             Id         = existingEmployee.Id,
             FirstName  = existingEmployee.FirstName,
             LastName   = existingEmployee.LastName,

@@ -1,6 +1,7 @@
 ﻿using demo_web_api.BLL.Interfaces;
 using demo_web_api.DAL.Entities;
 using demo_web_api.PL.DTOs;
+using demo_web_api.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace demo_web_api.Controllers;
@@ -18,7 +19,7 @@ public class ProjectsController : ControllerBase {
     public async Task<IActionResult> GetAllProjects() {
         var projects = await _projectService.GetAllProjectsAsync();
         var result = projects.Select(
-            project => new ProjectDto {
+            project => new ProjectVm {
                 Id                  = project.Id,
                 Name                = project.Name,
                 CustomerCompanyId   = project.CustomerCompanyId,
@@ -39,7 +40,7 @@ public class ProjectsController : ControllerBase {
 
         if (project is null) return NotFound();
 
-        var foundProject = new ProjectDto {
+        var foundProject = new ProjectVm {
             Id                  = project.Id,
             Name                = project.Name,
             CustomerCompanyId   = project.CustomerCompanyId,
@@ -54,21 +55,21 @@ public class ProjectsController : ControllerBase {
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateProject(ProjectDto dto) {
+    public async Task<IActionResult> CreateProject(ProjectDto projectDto) {
         var newProject = new Project {
             Id                  = Guid.NewGuid(),
-            Name                = dto.Name,
-            CustomerCompanyId   = dto.CustomerCompanyId,
-            ContractorCompanyId = dto.ContractorCompanyId,
-            StartDate           = dto.StartDate,
-            EndDate             = dto.EndDate,
-            Priority            = dto.Priority,
-            ProjectManagerId    = dto.ProjectManagerId
+            Name                = projectDto.Name,
+            CustomerCompanyId   = projectDto.CustomerCompanyId,
+            ContractorCompanyId = projectDto.ContractorCompanyId,
+            StartDate           = projectDto.StartDate,
+            EndDate             = projectDto.EndDate,
+            Priority            = projectDto.Priority,
+            ProjectManagerId    = projectDto.ProjectManagerId
         };
 
         await _projectService.AddProjectAsync(newProject);
 
-        return CreatedAtAction(nameof(GetProjectById), new { id = newProject.Id }, dto);
+        return CreatedAtAction(nameof(GetProjectById), new { id = newProject.Id }, projectDto);
     }
 
     [HttpPut("{id:guid}")]

@@ -1,6 +1,7 @@
-﻿namespace demo_web_api.ViewModels;
+﻿namespace demo_web_api.PL.DTOs;
 
-public class ProjectDto {
+public class ProjectVm {
+    public Guid      Id                  { get; set; }
     public string    Name                { get; set; }
     public Guid      CustomerCompanyId   { get; set; }
     public Guid      ContractorCompanyId { get; set; }
