@@ -35,5 +35,9 @@ public class ProjectEmployeeService : IProjectEmployeeService {
 
     public async Task<List<Project>> GetProjectsByEmployeeAsync(Guid employeeId) {
         return await _unitOfWork.ProjectEmployees.GetProjectsByEmployeeAsync(employeeId);
+    }   
+
+    public async Task<List<ProjectEmployee>> GetAllProjectEmployeesAsync() {
+        return await _unitOfWork.ProjectEmployees.GetAllProjectEmployeesAsync();
     }
 }

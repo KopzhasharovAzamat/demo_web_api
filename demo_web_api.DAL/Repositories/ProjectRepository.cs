@@ -14,6 +14,9 @@ public class ProjectRepository : IProjectRepository {
 
     public async Task<List<Project>> GetAllProjectsAsync() {
         return await _dbContext.Projects
+            .Include(x => x.CustomerCompany)
+            .Include(x => x.ContractorCompany)
+            .Include(x => x.ProjectManager)
             .Include(x => x.ProjectEmployees)
             .ThenInclude(x => x.Employee)
             .ToListAsync();

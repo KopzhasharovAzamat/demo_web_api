@@ -7,4 +7,5 @@ public interface IProjectEmployeeService {
     Task RemoveEmployeeFromProjectAsync(Guid projectId, Guid employeeId);
     Task<List<Employee>> GetEmployeesByProjectAsync(Guid projectId);
     Task<List<Project>> GetProjectsByEmployeeAsync(Guid employeeId);
+    Task<List<ProjectEmployee>> GetAllProjectEmployeesAsync();
 }

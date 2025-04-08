@@ -23,14 +23,19 @@ public class ProjectsController : ControllerBase {
         var projects = await _projectService.GetAllProjectsAsync();
         var result = projects.Select(
             project => new ProjectVm {
-                Id                  = project.Id,
-                Name                = project.Name,
-                CustomerCompanyId   = project.CustomerCompanyId,
-                ContractorCompanyId = project.ContractorCompanyId,
-                StartDate           = project.StartDate,
-                EndDate             = project.EndDate,
-                Priority            = project.Priority,
-                ProjectManagerId    = project.ProjectManagerId
+                Id                    = project.Id,
+                Name                  = project.Name,
+                CustomerCompanyId     = project.CustomerCompanyId,
+                CustomerCompanyName   = project.CustomerCompany?.Name,
+                ContractorCompanyId   = project.ContractorCompanyId,
+                ContractorCompanyName = project.ContractorCompany?.Name,
+                StartDate             = project.StartDate,
+                EndDate               = project.EndDate,
+                Priority              = project.Priority,
+                ProjectManagerId      = project.ProjectManagerId,
+                ProjectManagerName = project.ProjectManager != null ?
+                    $"{project.ProjectManager.LastName} {project.ProjectManager.FirstName}" :
+                    null
             }
         );
 

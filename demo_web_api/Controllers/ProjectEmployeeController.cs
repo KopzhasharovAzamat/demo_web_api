@@ -1,6 +1,5 @@
 ﻿using demo_web_api.BLL.Interfaces;
 using demo_web_api.DTOs;
-using demo_web_api.Validation;
 using demo_web_api.ViewModels;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +18,25 @@ public class ProjectEmployeeController : ControllerBase {
     ) {
         _projectEmployeeService   = projectEmployeeService;
         _projectEmployeeValidator = projectEmployeeValidator;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAllProjectEmployees() {
+        var projectEmployees = await _projectEmployeeService.GetAllProjectEmployeesAsync();
+
+        var result = projectEmployees.Select(
+            pe => new ProjectEmployeeVm() {
+                EmployeeId  = pe.Employee.Id,
+                FullName    = $"{pe.Employee.LastName} {pe.Employee.FirstName} {pe.Employee.MiddleName}",
+                Email       = pe.Employee.Email,
+                ProjectId   = pe.Project.Id,
+                ProjectName = pe.Project.Name,
+                StartDate   = pe.Project.StartDate,
+                EndDate     = pe.Project.EndDate
+            }
+        ).ToList();
+
+        return Ok(result);
     }
 
     [HttpPost("assign")]

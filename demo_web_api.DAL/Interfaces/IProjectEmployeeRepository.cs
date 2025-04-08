@@ -8,4 +8,5 @@ public interface IProjectEmployeeRepository {
     Task<bool> ExistsProjectEmployeeAsync(Guid projectId, Guid employeeId);
     Task<List<Employee>> GetEmployeesByProjectAsync(Guid projectId);
     Task<List<Project>> GetProjectsByEmployeeAsync(Guid employeeId);
+    Task<List<ProjectEmployee>> GetAllProjectEmployeesAsync();
 }

@@ -42,4 +42,11 @@ public class ProjectEmployeeRepository : IProjectEmployeeRepository {
             .Select(pe => pe.Project)
             .ToListAsync();
     }
+
+    public async Task<List<ProjectEmployee>> GetAllProjectEmployeesAsync() {
+        return await _dbContext.ProjectEmployees
+            .Include(pe => pe.Employee)
+            .Include(pe => pe.Project)
+            .ToListAsync();
+    }
 }
