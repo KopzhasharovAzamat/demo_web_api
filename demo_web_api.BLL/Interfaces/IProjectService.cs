@@ -8,4 +8,7 @@ public interface IProjectService {
     Task AddProjectAsync(Project project);
     Task UpdateProjectAsync(Project project);
     Task DeleteProjectAsync(Guid id);
+    Task<List<Employee>> GetEmployeesByProjectIdAsync(Guid projectId);
+    Task AddEmployeesToProjectAsync(Guid projectId, List<Guid> employeeIds);
+    Task RemoveEmployeeFromProjectAsync(Guid projectId, Guid employeeId);
 }

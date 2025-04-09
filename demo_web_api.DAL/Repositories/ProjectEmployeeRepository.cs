@@ -16,12 +16,32 @@ public class ProjectEmployeeRepository : IProjectEmployeeRepository {
         await _dbContext.ProjectEmployees.AddAsync(projectEmployee);
     }
 
+    public async Task AssignEmployeesToProjectAsync(Guid projectId, List<Guid> employeeIds) {
+        foreach (var employeeId in employeeIds) {
+            var exists = await _dbContext.ProjectEmployees
+                .AnyAsync(pe => pe.ProjectId == projectId && pe.EmployeeId == employeeId);
+
+            if (!exists) {
+                var projectEmployee = new ProjectEmployee {
+                    ProjectId  = projectId,
+                    EmployeeId = employeeId
+                };
+
+                await _dbContext.ProjectEmployees.AddAsync(projectEmployee);
+            }
+        }
+
+        await _dbContext.SaveChangesAsync();
+    }
+
     public async Task RemoveProjectEmployeeAsync(Guid projectId, Guid employeeId) {
         var entity = await _dbContext.ProjectEmployees
             .FirstOrDefaultAsync(pe => pe.ProjectId == projectId && pe.EmployeeId == employeeId);
         if (entity is not null) {
             _dbContext.ProjectEmployees.Remove(entity);
         }
+
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task<bool> ExistsProjectEmployeeAsync(Guid projectId, Guid employeeId) {

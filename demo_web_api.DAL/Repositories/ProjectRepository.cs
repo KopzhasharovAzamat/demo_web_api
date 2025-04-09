@@ -50,4 +50,41 @@ public class ProjectRepository : IProjectRepository {
     public async Task<bool> ProjectExistsAsync(Guid id) {
         return await _dbContext.Projects.AnyAsync(x => x.Id == id);
     }
+
+    public async Task<List<Employee>> GetEmployeesByProjectIdAsync(Guid projectId) {
+        return await _dbContext.ProjectEmployees
+            .Where(pe => pe.ProjectId == projectId)
+            .Include(pe => pe.Employee)
+            .Select(pe => pe.Employee)
+            .ToListAsync();
+    }
+
+    public async Task AddEmployeesToProjectAsync(Guid projectId, List<Guid> employeeIds) {
+        var existingLinks = await _dbContext.ProjectEmployees
+            .Where(pe => pe.ProjectId == projectId)
+            .Select(pe => pe.EmployeeId)
+            .ToListAsync();
+
+        var newLinks = employeeIds
+            .Except(existingLinks)
+            .Select(
+                eId => new ProjectEmployee {
+                    ProjectId  = projectId,
+                    EmployeeId = eId
+                }
+            );
+
+        _dbContext.ProjectEmployees.AddRange(newLinks);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task RemoveEmployeeFromProjectAsync(Guid projectId, Guid employeeId) {
+        var link = await _dbContext.ProjectEmployees
+            .FirstOrDefaultAsync(pe => pe.ProjectId == projectId && pe.EmployeeId == employeeId);
+
+        if (link != null) {
+            _dbContext.ProjectEmployees.Remove(link);
+            await _dbContext.SaveChangesAsync();
+        }
+    }
 }

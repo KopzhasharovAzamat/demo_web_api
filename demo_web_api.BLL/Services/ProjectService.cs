@@ -33,4 +33,18 @@ public class ProjectService : IProjectService {
         await _unitOfWork.Projects.DeleteProjectAsync(id);
         await _unitOfWork.SaveAsync();
     }
+
+    public async Task<List<Employee>> GetEmployeesByProjectIdAsync(Guid projectId) {
+        return await _unitOfWork.Projects.GetEmployeesByProjectIdAsync(projectId);
+    }
+
+    public async Task AddEmployeesToProjectAsync(Guid projectId, List<Guid> employeeIds) {
+        await _unitOfWork.Projects.AddEmployeesToProjectAsync(projectId, employeeIds);
+        await _unitOfWork.SaveAsync();
+    }
+
+    public async Task RemoveEmployeeFromProjectAsync(Guid projectId, Guid employeeId) {
+        await _unitOfWork.Projects.RemoveEmployeeFromProjectAsync(projectId, employeeId);
+        await _unitOfWork.SaveAsync();
+    }
 }

@@ -40,31 +40,24 @@ public class ProjectEmployeeController : ControllerBase {
     }
 
     [HttpPost("assign")]
-    public async Task<IActionResult> AssignEmployee(ProjectEmployeeDto projectEmployeeDto) {
-        var validationResult = await _projectEmployeeValidator.ValidateAsync(projectEmployeeDto);
-        if (!validationResult.IsValid) {
-            return BadRequest(validationResult.Errors);
+    public async Task<IActionResult> AssignEmployees(AssignEmployeesDto dto) {
+        if (dto.EmployeeIds == null || dto.EmployeeIds.Count == 0) {
+            return BadRequest("Employee list is empty");
         }
 
-        await _projectEmployeeService.AssignEmployeeToProjectAsync(
-            projectEmployeeDto.ProjectId,
-            projectEmployeeDto.EmployeeId
-        );
+        await _projectEmployeeService.AssignEmployeesToProjectAsync(dto.ProjectId, dto.EmployeeIds);
 
-        return Ok("Employee assigned to project.");
+        return Ok();
     }
 
     [HttpPost("remove")]
-    public async Task<IActionResult> RemoveEmployee(ProjectEmployeeDto projectEmployeeDto) {
-        var validationResult = await _projectEmployeeValidator.ValidateAsync(projectEmployeeDto);
+    public async Task<IActionResult> RemoveEmployee(ProjectEmployeeDto dto) {
+        var validationResult = await _projectEmployeeValidator.ValidateAsync(dto);
         if (!validationResult.IsValid) {
             return BadRequest(validationResult.Errors);
         }
 
-        await _projectEmployeeService.RemoveEmployeeFromProjectAsync(
-            projectEmployeeDto.ProjectId,
-            projectEmployeeDto.EmployeeId
-        );
+        await _projectEmployeeService.RemoveEmployeeFromProjectAsync(dto.ProjectId, dto.EmployeeId);
 
         return Ok("Employee removed from project.");
     }

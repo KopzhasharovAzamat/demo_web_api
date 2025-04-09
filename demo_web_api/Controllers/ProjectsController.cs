@@ -1,5 +1,6 @@
 ﻿using demo_web_api.BLL.Interfaces;
 using demo_web_api.DAL.Entities;
+using demo_web_api.DTOs;
 using demo_web_api.PL.DTOs;
 using demo_web_api.ViewModels;
 using FluentValidation;
@@ -113,6 +114,36 @@ public class ProjectsController : ControllerBase {
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteProject(Guid id) {
         await _projectService.DeleteProjectAsync(id);
+
+        return NoContent();
+    }
+
+    [HttpGet("{projectId:guid}/employees")]
+    public async Task<IActionResult> GetEmployeesByProject(Guid projectId) {
+        var employees = await _projectService.GetEmployeesByProjectIdAsync(projectId);
+        var result = employees.Select(
+            e => new EmployeeVm {
+                Id = e.Id,
+                LastName = e.LastName,
+                FirstName = e.FirstName,
+                MiddleName = e.MiddleName,
+                Email = e.Email
+            }
+        );
+
+        return Ok(result);
+    }
+
+    [HttpPost("{projectId:guid}/employees")]
+    public async Task<IActionResult> AddEmployeesToProject(Guid projectId, AssignEmployeesDto dto) {
+        await _projectService.AddEmployeesToProjectAsync(projectId, dto.EmployeeIds);
+
+        return NoContent();
+    }
+
+    [HttpDelete("{projectId:guid}/employees/{employeeId:guid}")]
+    public async Task<IActionResult> RemoveEmployeeFromProject(Guid projectId, Guid employeeId) {
+        await _projectService.RemoveEmployeeFromProjectAsync(projectId, employeeId);
 
         return NoContent();
     }

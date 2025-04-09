@@ -9,4 +9,7 @@ public interface IProjectRepository {
     Task UpdateProjectAsync(Project project);
     Task DeleteProjectAsync(Guid id);
     Task<bool> ProjectExistsAsync(Guid id);
+    Task<List<Employee>> GetEmployeesByProjectIdAsync(Guid projectId);
+    Task AddEmployeesToProjectAsync(Guid projectId, List<Guid> employeeIds);
+    Task RemoveEmployeeFromProjectAsync(Guid projectId, Guid employeeId);
 }
