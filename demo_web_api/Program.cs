@@ -1,25 +1,68 @@
+using FluentValidation;
+using demo_web_api.Validation;
+using demo_web_api.BLL.Interfaces;
+using demo_web_api.BLL.Services;
+using demo_web_api.DAL.EntityFramework;
+using demo_web_api.DAL.Interfaces;
+using demo_web_api.DAL.Repositories;
+using demo_web_api.DTOs;
+using Microsoft.EntityFrameworkCore;
+using demo_web_api.ViewModels;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Using SqlServer with connection string from appsettings
+builder.Services.AddDbContext<ApplicationDbContext>(
+    options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
 
+// Adding unit of work to DI container
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// Adding validators to DI container
+builder.Services.AddScoped<IValidator<EmployeeDto>, EmployeeValidator>();
+builder.Services.AddScoped<IValidator<ProjectDto>, ProjectValidator>();
+builder.Services.AddScoped<IValidator<CompanyDto>, CompanyValidator>();
+builder.Services.AddScoped<IValidator<ProjectEmployeeDto>, ProjectEmployeeValidator>();
+
+// Adding repositories to DI container
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<IProjectEmployeeRepository, ProjectEmployeeRepository>();
+
+// Adding services to DI container
+builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<ICompanyService, CompanyService>();
+builder.Services.AddScoped<IProjectEmployeeService, ProjectEmployeeService>();
+
+// Adding controllers, swagger and endpoints explorer
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Allowing front project to endpoints
+builder.Services.AddCors(options => {
+    options.AddDefaultPolicy(policy => {
+        policy.WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+if (app.Environment.IsDevelopment()) {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+// Using cors (for frontend), mapping controllers and starting app
+app.UseCors();
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
