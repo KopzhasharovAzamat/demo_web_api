@@ -19,7 +19,7 @@ public class ProjectEmployeeService : IProjectEmployeeService {
                 EmployeeId = employeeId
             };
 
-            await _unitOfWork.ProjectEmployees.AddProjectEmployeeAsync(entity);
+            _unitOfWork.ProjectEmployees.AddProjectEmployeeAsync(entity);
             await _unitOfWork.SaveAsync();
         }
     }
