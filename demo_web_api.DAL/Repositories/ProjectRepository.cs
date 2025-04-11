@@ -29,28 +29,6 @@ public class ProjectRepository : IProjectRepository {
             .FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task AddProjectAsync(Project project) {
-        _dbContext.Projects.Add(project);
-        await _dbContext.SaveChangesAsync();
-    }
-
-    public async Task UpdateProjectAsync(Project project) {
-        _dbContext.Projects.Update(project);
-        await _dbContext.SaveChangesAsync();
-    }
-
-    public async Task DeleteProjectAsync(Guid id) {
-        var project = await _dbContext.Projects.FindAsync(id);
-        if (project != null) {
-            _dbContext.Projects.Remove(project);
-            await _dbContext.SaveChangesAsync();
-        }
-    }
-
-    public async Task<bool> ProjectExistsAsync(Guid id) {
-        return await _dbContext.Projects.AnyAsync(x => x.Id == id);
-    }
-
     public async Task<List<Employee>> GetEmployeesByProjectIdAsync(Guid projectId) {
         return await _dbContext.ProjectEmployees
             .Where(pe => pe.ProjectId == projectId)
@@ -75,7 +53,6 @@ public class ProjectRepository : IProjectRepository {
             );
 
         _dbContext.ProjectEmployees.AddRange(newLinks);
-        await _dbContext.SaveChangesAsync();
     }
 
     public async Task RemoveEmployeeFromProjectAsync(Guid projectId, Guid employeeId) {
@@ -84,7 +61,25 @@ public class ProjectRepository : IProjectRepository {
 
         if (link != null) {
             _dbContext.ProjectEmployees.Remove(link);
-            await _dbContext.SaveChangesAsync();
+        }
+    }
+
+    public async Task<bool> ProjectExistsAsync(Guid id) {
+        return await _dbContext.Projects.AnyAsync(x => x.Id == id);
+    }
+
+    public void AddProjectAsync(Project project) {
+        _dbContext.Projects.Add(project);
+    }
+
+    public void UpdateProjectAsync(Project project) {
+        _dbContext.Projects.Update(project);
+    }
+
+    public async Task DeleteProjectAsync(Guid id) {
+        var project = await _dbContext.Projects.FindAsync(id);
+        if (project != null) {
+            _dbContext.Projects.Remove(project);
         }
     }
 }
