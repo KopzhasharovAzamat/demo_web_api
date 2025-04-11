@@ -1,8 +1,8 @@
 ﻿using demo_web_api.BLL.Interfaces;
 using demo_web_api.DAL.Entities;
-using demo_web_api.DTOs;
-using demo_web_api.PL.DTOs;
-using demo_web_api.ViewModels;
+using demo_web_api.DTOs.Employee;
+using demo_web_api.DTOs.Project;
+using demo_web_api.DTOs.ProjectEmployee;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -123,11 +123,11 @@ public class ProjectsController : ControllerBase {
         var employees = await _projectService.GetEmployeesByProjectIdAsync(projectId);
         var result = employees.Select(
             e => new EmployeeVm {
-                Id = e.Id,
-                LastName = e.LastName,
-                FirstName = e.FirstName,
+                Id         = e.Id,
+                LastName   = e.LastName,
+                FirstName  = e.FirstName,
                 MiddleName = e.MiddleName,
-                Email = e.Email
+                Email      = e.Email
             }
         );
 

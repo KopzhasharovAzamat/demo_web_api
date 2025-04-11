@@ -1,4 +1,4 @@
-﻿namespace demo_web_api.ViewModels;
+﻿namespace demo_web_api.DTOs.Project;
 
 public class ProjectDto {
     public string    Name                { get; set; }

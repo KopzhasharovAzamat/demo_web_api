@@ -1,4 +1,4 @@
-﻿using demo_web_api.ViewModels;
+﻿using demo_web_api.DTOs.Company;
 using FluentValidation;
 
 namespace demo_web_api.Validation;

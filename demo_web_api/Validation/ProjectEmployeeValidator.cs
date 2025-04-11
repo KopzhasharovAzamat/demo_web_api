@@ -1,5 +1,5 @@
 ﻿using demo_web_api.DAL.Interfaces;
-using demo_web_api.DTOs;
+using demo_web_api.DTOs.ProjectEmployee;
 using FluentValidation;
 
 namespace demo_web_api.Validation;

@@ -1,4 +1,4 @@
-﻿namespace demo_web_api.PL.DTOs;
+﻿namespace demo_web_api.DTOs.Company;
 
 public class CompanyVm {
     public Guid   Id   { get; set; }

@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\demo_web_api.BLL\demo_web_api.BLL.csproj" />
     <ProjectReference Include="..\demo_web_api.DAL\demo_web_api.DAL.csproj" />
+    <ProjectReference Include="..\demo_web_api.DTOs\demo_web_api.DTOs.csproj" />
   </ItemGroup>
 
 </Project>

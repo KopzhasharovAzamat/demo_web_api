@@ -1,7 +1,6 @@
 ﻿using demo_web_api.BLL.Interfaces;
 using demo_web_api.DAL.Entities;
-using demo_web_api.PL.DTOs;
-using demo_web_api.ViewModels;
+using demo_web_api.DTOs.Company;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 

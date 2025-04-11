@@ -1,4 +1,4 @@
-﻿namespace demo_web_api.PL.DTOs;
+﻿namespace demo_web_api.DTOs.Project;
 
 public class ProjectVm
 {

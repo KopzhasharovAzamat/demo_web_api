@@ -1,5 +1,5 @@
 ﻿using demo_web_api.BLL.Interfaces;
-using demo_web_api.ViewModels;
+using demo_web_api.DTOs.Employee;
 using FluentValidation;
 
 namespace demo_web_api.Validation;

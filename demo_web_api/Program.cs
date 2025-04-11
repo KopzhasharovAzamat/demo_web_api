@@ -5,9 +5,11 @@ using demo_web_api.BLL.Services;
 using demo_web_api.DAL.EntityFramework;
 using demo_web_api.DAL.Interfaces;
 using demo_web_api.DAL.Repositories;
-using demo_web_api.DTOs;
 using Microsoft.EntityFrameworkCore;
-using demo_web_api.ViewModels;
+using demo_web_api.DTOs.Company;
+using demo_web_api.DTOs.Project;
+using demo_web_api.DTOs.Employee;
+using demo_web_api.DTOs.ProjectEmployee;
 
 var builder = WebApplication.CreateBuilder(args);
 
