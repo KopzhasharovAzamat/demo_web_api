@@ -20,21 +20,18 @@ public class CompanyRepository : ICompanyRepository {
         return await _dbContext.Companies.FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task AddCompanyAsync(Company company) {
+    public void AddCompanyAsync(Company company) {
         _dbContext.Companies.Add(company);
-        await _dbContext.SaveChangesAsync();
     }
 
-    public async Task UpdateCompanyAsync(Company company) {
+    public void UpdateCompanyAsync(Company company) {
         _dbContext.Companies.Update(company);
-        await _dbContext.SaveChangesAsync();
     }
 
     public async Task DeleteCompanyAsync(Guid id) {
         var company = await _dbContext.Companies.FindAsync(id);
         if (company != null) {
             _dbContext.Companies.Remove(company);
-            await _dbContext.SaveChangesAsync();
         }
     }
 }

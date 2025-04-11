@@ -20,12 +20,12 @@ public class CompanyService : ICompanyService {
     }
 
     public async Task AddCompanyAsync(Company company) {
-        await _unitOfWork.Companies.AddCompanyAsync(company);
+        _unitOfWork.Companies.AddCompanyAsync(company);
         await _unitOfWork.SaveAsync();
     }
 
     public async Task UpdateCompanyAsync(Company company) {
-        await _unitOfWork.Companies.UpdateCompanyAsync(company);
+        _unitOfWork.Companies.UpdateCompanyAsync(company);
         await _unitOfWork.SaveAsync();
     }
 
