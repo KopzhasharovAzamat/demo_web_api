@@ -23,41 +23,31 @@ public class CompaniesController : ControllerBase {
     [HttpGet]
     public async Task<IActionResult> GetAllCompanies() {
         var companies = await _companyService.GetAllCompaniesAsync();
-        var result    = _mapper.Map<List<CompanyVm>>(companies);
 
-        return Ok(result);
+        return Ok(companies);
     }
 
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetCompanyById(Guid id) {
-        var existingCompany = await _companyService.GetCompanyByIdAsync(id);
+        var foundCompany = await _companyService.GetCompanyByIdAsync(id);
 
-        if (existingCompany is null) return NotFound();
+        if (foundCompany is null) return NotFound();
 
-        var result = _mapper.Map<CompanyVm>(existingCompany);
-
-        return Ok(result);
+        return Ok(foundCompany);
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateCompany(AddCompanyVm addCompanyVm) {
-        await _companyService.AddCompanyAsync(addCompanyVm);
+    public async Task<IActionResult> CreateCompany(AddCompanyVm vm) {
+        var created = await _companyService.AddCompanyAsync(vm);
 
-        return CreatedAtAction(nameof(GetCompanyById), new { id = newCompany.Id }, companyDto);
+        return CreatedAtAction(nameof(GetCompanyById), new { id = created.Id }, created);
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> UpdateCompany(Guid id, CompanyDto companyDto) {
-        var existingCompany = await _companyService.GetCompanyByIdAsync(id);
-        if (existingCompany is null) {
-            return NotFound();
-        }
+    public async Task<IActionResult> UpdateCompany(Guid id, UpdateCompanyVm vm) {
+        var updated = await _companyService.UpdateCompanyAsync(id, vm);
 
-        _mapper.Map(companyDto, existingCompany);
-
-        await _companyService.UpdateCompanyAsync(existingCompany);
-
-        return NoContent();
+        return Ok(updated);
     }
 
     [HttpDelete("{id:guid}")]

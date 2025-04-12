@@ -8,18 +8,21 @@ using FluentValidation;
 namespace demo_web_api.BLL.Services;
 
 public class CompanyService : ICompanyService {
-    private readonly IUnitOfWork         _unitOfWork;
-    private readonly IValidator<Company> _validator;
-    private readonly IMapper             _mapper;
+    private readonly IUnitOfWork                 _unitOfWork;
+    private readonly IValidator<AddCompanyVm>    _addValidator;
+    private readonly IValidator<UpdateCompanyVm> _updateValidator;
+    private readonly IMapper                     _mapper;
 
     public CompanyService(
-        IUnitOfWork         unitOfWork,
-        IValidator<Company> validator,
-        IMapper             mapper
+        IUnitOfWork                 unitOfWork,
+        IValidator<AddCompanyVm>    addValidator,
+        IValidator<UpdateCompanyVm> updateValidator,
+        IMapper                     mapper
     ) {
-        _unitOfWork = unitOfWork;
-        _validator  = validator;
-        _mapper     = mapper;
+        _unitOfWork      = unitOfWork;
+        _addValidator    = addValidator;
+        _updateValidator = updateValidator;
+        _mapper          = mapper;
     }
 
     // Get all companies
@@ -33,28 +36,38 @@ public class CompanyService : ICompanyService {
     }
 
     // Add company
-    public async Task AddCompanyAsync(AddCompanyVm addCompanyVm) {
-        var validationResult = await _validator.ValidateAsync(addCompanyVm);
+    public async Task<Company> AddCompanyAsync(AddCompanyVm addCompanyVm) {
+        var validationResult = await _addValidator.ValidateAsync(addCompanyVm);
         if (!validationResult.IsValid) {
             throw new ValidationException(validationResult.Errors);
         }
 
-        var newCompany = _mapper.Map<Company>(companyDto);
+        var newCompany = _mapper.Map<Company>(addCompanyVm);
         newCompany.Id = Guid.NewGuid();
 
-        _unitOfWork.Companies.AddCompanyAsync(company);
+        _unitOfWork.Companies.AddCompanyAsync(newCompany);
         await _unitOfWork.SaveAsync();
+
+        return newCompany;
     }
 
     // Update company
-    public async Task UpdateCompanyAsync(Company company) {
-        var validationResult = await _validator.ValidateAsync(company);
+    public async Task<Company> UpdateCompanyAsync(Guid id, UpdateCompanyVm updateVm) {
+        var validationResult = await _updateValidator.ValidateAsync(updateVm);
         if (!validationResult.IsValid) {
             throw new ValidationException(validationResult.Errors);
         }
 
-        _unitOfWork.Companies.UpdateCompanyAsync(company);
+        var existingCompany = await _unitOfWork.Companies.GetCompanyByIdAsync(id);
+        if (existingCompany is null) {
+            throw new("Company not found");
+        }
+
+        _mapper.Map(updateVm, existingCompany);
+        _unitOfWork.Companies.UpdateCompanyAsync(existingCompany);
         await _unitOfWork.SaveAsync();
+
+        return existingCompany;
     }
 
     // Delete company
