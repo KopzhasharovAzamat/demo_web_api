@@ -1,10 +1,10 @@
 ﻿using demo_web_api.BLL.Interfaces;
-using demo_web_api.DTOs.Employee;
+using demo_web_api.DAL.Entities;
 using FluentValidation;
 
-namespace demo_web_api.Validation.Validators.Employee;
+namespace demo_web_api.BLL.Validation;
 
-public class EmployeeValidator : AbstractValidator<EmployeeDto> {
+public class EmployeeValidator : AbstractValidator<Employee> {
     public EmployeeValidator(IEmployeeService employeeService) {
         RuleFor(x => x.LastName)
             .NotEmpty().WithMessage("Last name is required.")

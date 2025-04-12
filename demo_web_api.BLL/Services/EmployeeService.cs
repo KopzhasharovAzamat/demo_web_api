@@ -1,14 +1,17 @@
 ﻿using demo_web_api.BLL.Interfaces;
 using demo_web_api.DAL.Entities;
 using demo_web_api.DAL.Interfaces;
+using FluentValidation;
 
 namespace demo_web_api.BLL.Services;
 
 public class EmployeeService : IEmployeeService {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IUnitOfWork          _unitOfWork;
+    private readonly IValidator<Employee> _employeeValidator;
 
-    public EmployeeService(IUnitOfWork unitOfWork) {
-        _unitOfWork = unitOfWork;
+    public EmployeeService(IUnitOfWork unitOfWork, IValidator<Employee> employeeValidator) {
+        _unitOfWork        = unitOfWork;
+        _employeeValidator = employeeValidator;
     }
 
     public async Task<List<Employee>> GetAllEmployeesAsync() {
@@ -24,11 +27,21 @@ public class EmployeeService : IEmployeeService {
     }
 
     public async Task AddEmployeeAsync(Employee employee) {
+        var validationResult = await _employeeValidator.ValidateAsync(employee);
+        if (!validationResult.IsValid) {
+            throw new ValidationException(validationResult.Errors);
+        }
+
         _unitOfWork.Employees.AddEmployeeAsync(employee);
         await _unitOfWork.SaveAsync();
     }
 
     public async Task UpdateEmployeeAsync(Employee employee) {
+        var validationResult = await _employeeValidator.ValidateAsync(employee);
+        if (!validationResult.IsValid) {
+            throw new ValidationException(validationResult.Errors);
+        }
+
         _unitOfWork.Employees.UpdateEmployeeAsync(employee);
         await _unitOfWork.SaveAsync();
     }

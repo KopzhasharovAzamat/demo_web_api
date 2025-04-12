@@ -1,9 +1,9 @@
-﻿using demo_web_api.DTOs.Company;
+﻿using demo_web_api.DAL.Entities;
 using FluentValidation;
 
-namespace demo_web_api.Validation.Validators.Company;
+namespace demo_web_api.BLL.Validation;
 
-public class CompanyValidator : AbstractValidator<CompanyDto> {
+public class CompanyValidator : AbstractValidator<Company> {
     public CompanyValidator() {
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Company name is required.")

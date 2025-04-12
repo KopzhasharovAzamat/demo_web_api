@@ -31,6 +31,7 @@ public class ProjectEmployeeService : IProjectEmployeeService {
 
     public async Task RemoveEmployeeFromProjectAsync(Guid projectId, Guid employeeId) {
         await _unitOfWork.ProjectEmployees.RemoveProjectEmployeeAsync(projectId, employeeId);
+        await _unitOfWork.SaveAsync();
     }
 
     public async Task<List<Employee>> GetEmployeesByProjectAsync(Guid projectId) {

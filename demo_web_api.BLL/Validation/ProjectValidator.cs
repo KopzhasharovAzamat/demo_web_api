@@ -1,9 +1,9 @@
-﻿using demo_web_api.DTOs.Project;
+﻿using demo_web_api.DAL.Entities;
 using FluentValidation;
 
-namespace demo_web_api.Validation.Validators.Project;
+namespace demo_web_api.BLL.Validation;
 
-public class ProjectValidator : AbstractValidator<ProjectDto> {
+public class ProjectValidator : AbstractValidator<Project> {
     public ProjectValidator() {
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Project name is required.")

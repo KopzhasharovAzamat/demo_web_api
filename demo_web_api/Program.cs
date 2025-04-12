@@ -1,17 +1,12 @@
 using demo_web_api.BLL.Interfaces;
 using demo_web_api.BLL.Services;
+using demo_web_api.BLL.Validation;
+using demo_web_api.DAL.Entities;
 using demo_web_api.DAL.EntityFramework;
 using demo_web_api.DAL.Interfaces;
 using demo_web_api.DAL.Repositories;
-using demo_web_api.DTOs.Company;
-using demo_web_api.DTOs.Employee;
-using demo_web_api.DTOs.Project;
-using demo_web_api.DTOs.ProjectEmployee;
 using demo_web_api.Mapping.AutoMapper;
-using demo_web_api.Validation.Validators.Company;
-using demo_web_api.Validation.Validators.Employee;
-using demo_web_api.Validation.Validators.Project;
-using demo_web_api.Validation.Validators.ProjectEmployee;
+using demo_web_api.Validation.Validators;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,10 +25,10 @@ builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Adding validators to DI container
-builder.Services.AddScoped<IValidator<EmployeeDto>, EmployeeValidator>();
-builder.Services.AddScoped<IValidator<ProjectDto>, ProjectValidator>();
-builder.Services.AddScoped<IValidator<CompanyDto>, CompanyValidator>();
-builder.Services.AddScoped<IValidator<ProjectEmployeeDto>, ProjectEmployeeValidator>();
+builder.Services.AddScoped<IValidator<Employee>, EmployeeValidator>();
+builder.Services.AddScoped<IValidator<Project>, ProjectValidator>();
+builder.Services.AddScoped<IValidator<Company>, CompanyValidator>();
+builder.Services.AddScoped<IValidator<ProjectEmployee>, ProjectEmployeeValidator>();
 
 // Adding repositories to DI container
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();

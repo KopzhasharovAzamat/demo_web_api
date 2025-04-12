@@ -1,10 +1,10 @@
-﻿using demo_web_api.DAL.Interfaces;
-using demo_web_api.DTOs.ProjectEmployee;
+﻿using demo_web_api.DAL.Entities;
+using demo_web_api.DAL.Interfaces;
 using FluentValidation;
 
-namespace demo_web_api.Validation.Validators.ProjectEmployee;
+namespace demo_web_api.BLL.Validation;
 
-public class ProjectEmployeeValidator : AbstractValidator<ProjectEmployeeDto> {
+public class ProjectEmployeeValidator : AbstractValidator<ProjectEmployee> {
     public ProjectEmployeeValidator(IUnitOfWork unitOfWork) {
         RuleFor(x => x.ProjectId)
             .NotEmpty().WithMessage("ProjectId is required.")

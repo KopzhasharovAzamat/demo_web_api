@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.11.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\demo_web_api.DAL\demo_web_api.DAL.csproj" />
+    <ProjectReference Include="..\demo_web_api.DTOs\demo_web_api.DTOs.csproj" />
   </ItemGroup>
 
 </Project>
