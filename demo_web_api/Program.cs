@@ -1,12 +1,15 @@
+using demo_web_api.BLL.AutoMapper;
 using demo_web_api.BLL.Interfaces;
 using demo_web_api.BLL.Services;
 using demo_web_api.BLL.Validation;
+using demo_web_api.BLL.Validation.CompanyValidators;
+using demo_web_api.BLL.Validation.EmployeeValidators;
+using demo_web_api.BLL.Validation.ProjectEmployeeValidators;
+using demo_web_api.BLL.Validation.ProjectValidators;
 using demo_web_api.DAL.Entities;
 using demo_web_api.DAL.EntityFramework;
 using demo_web_api.DAL.Interfaces;
 using demo_web_api.DAL.Repositories;
-using demo_web_api.Mapping.AutoMapper;
-using demo_web_api.Validation.Validators;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,26 +24,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 // Adding AutoMapper to DI container
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
-// Adding unit of work to DI container
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+// Adding repositories and unit of work to DI container
+builder.Services.AddRepositories();
 
 // Adding validators to DI container
-builder.Services.AddScoped<IValidator<Employee>, EmployeeValidator>();
-builder.Services.AddScoped<IValidator<Project>, ProjectValidator>();
-builder.Services.AddScoped<IValidator<Company>, CompanyValidator>();
-builder.Services.AddScoped<IValidator<ProjectEmployee>, ProjectEmployeeValidator>();
-
-// Adding repositories to DI container
-builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
-builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
-builder.Services.AddScoped<IProjectEmployeeRepository, ProjectEmployeeRepository>();
+builder.Services.AddValidators();
 
 // Adding services to DI container
-builder.Services.AddScoped<IProjectService, ProjectService>();
-builder.Services.AddScoped<IEmployeeService, EmployeeService>();
-builder.Services.AddScoped<ICompanyService, CompanyService>();
-builder.Services.AddScoped<IProjectEmployeeService, ProjectEmployeeService>();
+builder.Services.AddServices();
 
 // Adding controllers, swagger and endpoints explorer
 builder.Services.AddControllers();

@@ -1,7 +1,7 @@
 ﻿using demo_web_api.DAL.Entities;
 using FluentValidation;
 
-namespace demo_web_api.BLL.Validation;
+namespace demo_web_api.BLL.Validation.CompanyValidators;
 
 public class CompanyValidator : AbstractValidator<Company> {
     public CompanyValidator() {

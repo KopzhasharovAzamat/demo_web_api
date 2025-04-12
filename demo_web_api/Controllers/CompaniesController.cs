@@ -40,11 +40,8 @@ public class CompaniesController : ControllerBase {
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateCompany(CompanyDto companyDto) {
-        var newCompany = _mapper.Map<Company>(companyDto);
-        newCompany.Id = Guid.NewGuid();
-
-        await _companyService.AddCompanyAsync(newCompany);
+    public async Task<IActionResult> CreateCompany(AddCompanyVm addCompanyVm) {
+        await _companyService.AddCompanyAsync(addCompanyVm);
 
         return CreatedAtAction(nameof(GetCompanyById), new { id = newCompany.Id }, companyDto);
     }

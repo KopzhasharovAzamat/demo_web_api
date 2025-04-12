@@ -15,4 +15,8 @@
     <ProjectReference Include="..\demo_web_api.DTOs\demo_web_api.DTOs.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="AutoMapper\" />
+  </ItemGroup>
+
 </Project>
