@@ -4,7 +4,6 @@ using demo_web_api.DAL.Entities;
 using demo_web_api.DTOs.Employee;
 using demo_web_api.DTOs.Project;
 using demo_web_api.DTOs.ProjectEmployee;
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace demo_web_api.Controllers;
@@ -12,18 +11,15 @@ namespace demo_web_api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 public class ProjectsController : ControllerBase {
-    private readonly IProjectService        _projectService;
-    private readonly IValidator<ProjectDto> _projectValidator;
-    private readonly IMapper                _mapper;
+    private readonly IProjectService _projectService;
+    private readonly IMapper         _mapper;
 
     public ProjectsController(
-        IProjectService        projectService,
-        IValidator<ProjectDto> projectValidator,
-        IMapper                mapper
+        IProjectService projectService,
+        IMapper         mapper
     ) {
-        _projectService   = projectService;
-        _projectValidator = projectValidator;
-        _mapper           = mapper;
+        _projectService = projectService;
+        _mapper         = mapper;
     }
 
     [HttpGet]
@@ -47,11 +43,6 @@ public class ProjectsController : ControllerBase {
 
     [HttpPost]
     public async Task<IActionResult> CreateProject(ProjectDto projectDto) {
-        var validationResult = await _projectValidator.ValidateAsync(projectDto);
-        if (!validationResult.IsValid) {
-            return BadRequest(validationResult.Errors);
-        }
-
         var newProject = _mapper.Map<Project>(projectDto);
         newProject.Id = Guid.NewGuid();
 
@@ -62,11 +53,6 @@ public class ProjectsController : ControllerBase {
 
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateProject(Guid id, ProjectDto projectDto) {
-        var validationResult = await _projectValidator.ValidateAsync(projectDto);
-        if (!validationResult.IsValid) {
-            return BadRequest(validationResult.Errors);
-        }
-
         var existingProject = await _projectService.GetProjectByIdAsync(id);
         if (existingProject == null) {
             return NotFound();

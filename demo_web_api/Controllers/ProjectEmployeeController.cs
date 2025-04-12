@@ -3,7 +3,6 @@ using demo_web_api.BLL.Interfaces;
 using demo_web_api.DTOs.Employee;
 using demo_web_api.DTOs.Project;
 using demo_web_api.DTOs.ProjectEmployee;
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace demo_web_api.Controllers;
@@ -11,18 +10,15 @@ namespace demo_web_api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 public class ProjectEmployeeController : ControllerBase {
-    private readonly IProjectEmployeeService        _projectEmployeeService;
-    private readonly IValidator<ProjectEmployeeDto> _projectEmployeeValidator;
-    private readonly IMapper                        _mapper;
+    private readonly IProjectEmployeeService _projectEmployeeService;
+    private readonly IMapper                 _mapper;
 
     public ProjectEmployeeController(
-        IProjectEmployeeService        projectEmployeeService,
-        IValidator<ProjectEmployeeDto> projectEmployeeValidator,
-        IMapper                        mapper
+        IProjectEmployeeService projectEmployeeService,
+        IMapper                 mapper
     ) {
-        _projectEmployeeService   = projectEmployeeService;
-        _projectEmployeeValidator = projectEmployeeValidator;
-        _mapper                   = mapper;
+        _projectEmployeeService = projectEmployeeService;
+        _mapper                 = mapper;
     }
 
     [HttpGet]
@@ -64,11 +60,6 @@ public class ProjectEmployeeController : ControllerBase {
 
     [HttpPost("remove")]
     public async Task<IActionResult> RemoveEmployee(ProjectEmployeeDto dto) {
-        var validationResult = await _projectEmployeeValidator.ValidateAsync(dto);
-        if (!validationResult.IsValid) {
-            return BadRequest(validationResult.Errors);
-        }
-
         await _projectEmployeeService.RemoveEmployeeFromProjectAsync(dto.ProjectId, dto.EmployeeId);
 
         return Ok("Employee removed from project.");

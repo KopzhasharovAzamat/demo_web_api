@@ -2,7 +2,6 @@
 using demo_web_api.BLL.Interfaces;
 using demo_web_api.DAL.Entities;
 using demo_web_api.DTOs.Company;
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace demo_web_api.Controllers;
@@ -10,18 +9,15 @@ namespace demo_web_api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 public class CompaniesController : ControllerBase {
-    private readonly ICompanyService        _companyService;
-    private readonly IValidator<CompanyDto> _companyValidator;
-    private readonly IMapper                _mapper;
+    private readonly ICompanyService _companyService;
+    private readonly IMapper         _mapper;
 
     public CompaniesController(
-        ICompanyService        companyService,
-        IValidator<CompanyDto> companyValidator,
-        IMapper                mapper
+        ICompanyService companyService,
+        IMapper         mapper
     ) {
-        _companyService   = companyService;
-        _companyValidator = companyValidator;
-        _mapper           = mapper;
+        _companyService = companyService;
+        _mapper         = mapper;
     }
 
     [HttpGet]
@@ -45,11 +41,6 @@ public class CompaniesController : ControllerBase {
 
     [HttpPost]
     public async Task<IActionResult> CreateCompany(CompanyDto companyDto) {
-        var validationResult = await _companyValidator.ValidateAsync(companyDto);
-        if (!validationResult.IsValid) {
-            return BadRequest(validationResult.Errors);
-        }
-
         var newCompany = _mapper.Map<Company>(companyDto);
         newCompany.Id = Guid.NewGuid();
 
@@ -60,11 +51,6 @@ public class CompaniesController : ControllerBase {
 
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateCompany(Guid id, CompanyDto companyDto) {
-        var validationResult = await _companyValidator.ValidateAsync(companyDto);
-        if (!validationResult.IsValid) {
-            return BadRequest(validationResult.Errors);
-        }
-
         var existingCompany = await _companyService.GetCompanyByIdAsync(id);
         if (existingCompany is null) {
             return NotFound();
