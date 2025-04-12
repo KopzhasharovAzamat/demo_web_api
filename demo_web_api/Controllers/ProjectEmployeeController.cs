@@ -1,4 +1,7 @@
-﻿using demo_web_api.BLL.Interfaces;
+﻿using AutoMapper;
+using demo_web_api.BLL.Interfaces;
+using demo_web_api.DTOs.Employee;
+using demo_web_api.DTOs.Project;
 using demo_web_api.DTOs.ProjectEmployee;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
@@ -10,30 +13,40 @@ namespace demo_web_api.Controllers;
 public class ProjectEmployeeController : ControllerBase {
     private readonly IProjectEmployeeService        _projectEmployeeService;
     private readonly IValidator<ProjectEmployeeDto> _projectEmployeeValidator;
+    private readonly IMapper                        _mapper;
 
     public ProjectEmployeeController(
         IProjectEmployeeService        projectEmployeeService,
-        IValidator<ProjectEmployeeDto> projectEmployeeValidator
+        IValidator<ProjectEmployeeDto> projectEmployeeValidator,
+        IMapper                        mapper
     ) {
         _projectEmployeeService   = projectEmployeeService;
         _projectEmployeeValidator = projectEmployeeValidator;
+        _mapper                   = mapper;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAllProjectEmployees() {
         var projectEmployees = await _projectEmployeeService.GetAllProjectEmployeesAsync();
+        var result           = _mapper.Map<List<ProjectEmployeeVm>>(projectEmployees);
 
-        var result = projectEmployees.Select(
-            pe => new ProjectEmployeeVm() {
-                EmployeeId  = pe.Employee.Id,
-                FullName    = $"{pe.Employee.LastName} {pe.Employee.FirstName} {pe.Employee.MiddleName}",
-                Email       = pe.Employee.Email,
-                ProjectId   = pe.Project.Id,
-                ProjectName = pe.Project.Name,
-                StartDate   = pe.Project.StartDate,
-                EndDate     = pe.Project.EndDate
-            }
-        ).ToList();
+        return Ok(result);
+    }
+
+    [HttpGet("project/{projectId}")]
+    public async Task<IActionResult> GetEmployeesByProject(Guid projectId) {
+        var employeesByProject = await _projectEmployeeService.GetEmployeesByProjectAsync(projectId);
+
+        var result = _mapper.Map<List<EmployeeVm>>(employeesByProject);
+
+        return Ok(result);
+    }
+
+    [HttpGet("employee/{employeeId}")]
+    public async Task<IActionResult> GetProjectsByEmployee(Guid employeeId) {
+        var projectsByEmployee = await _projectEmployeeService.GetProjectsByEmployeeAsync(employeeId);
+
+        var result = _mapper.Map<List<ProjectVm>>(projectsByEmployee);
 
         return Ok(result);
     }
@@ -59,39 +72,5 @@ public class ProjectEmployeeController : ControllerBase {
         await _projectEmployeeService.RemoveEmployeeFromProjectAsync(dto.ProjectId, dto.EmployeeId);
 
         return Ok("Employee removed from project.");
-    }
-
-    [HttpGet("project/{projectId}")]
-    public async Task<IActionResult> GetEmployeesByProject(Guid projectId) {
-        var result = await _projectEmployeeService.GetEmployeesByProjectAsync(projectId);
-
-        return Ok(
-            result.Select(
-                e => new {
-                    e.Id,
-                    e.FirstName,
-                    e.LastName,
-                    e.MiddleName,
-                    e.Email
-                }
-            )
-        );
-    }
-
-    [HttpGet("employee/{employeeId}")]
-    public async Task<IActionResult> GetProjectsByEmployee(Guid employeeId) {
-        var result = await _projectEmployeeService.GetProjectsByEmployeeAsync(employeeId);
-
-        return Ok(
-            result.Select(
-                p => new {
-                    p.Id,
-                    p.Name,
-                    p.StartDate,
-                    p.EndDate,
-                    p.Priority
-                }
-            )
-        );
     }
 }

@@ -20,20 +20,6 @@ public class ProjectEmployeeRepository : IProjectEmployeeRepository {
             .ToListAsync();
     }
 
-    // Add ProjectEmployee entity
-    public void AddProjectEmployeeAsync(ProjectEmployee projectEmployee) {
-        _dbContext.ProjectEmployees.Add(projectEmployee);
-    }
-
-    // Remove EmployeeProject entity
-    public async Task RemoveProjectEmployeeAsync(Guid projectId, Guid employeeId) {
-        var entity = await _dbContext.ProjectEmployees
-            .FirstOrDefaultAsync(pe => pe.ProjectId == projectId && pe.EmployeeId == employeeId);
-        if (entity is not null) {
-            _dbContext.ProjectEmployees.Remove(entity);
-        }
-    }
-
     // Get list of employees by project
     public async Task<List<Employee>> GetEmployeesByProjectAsync(Guid projectId) {
         return await _dbContext.ProjectEmployees
@@ -46,8 +32,28 @@ public class ProjectEmployeeRepository : IProjectEmployeeRepository {
     public async Task<List<Project>> GetProjectsByEmployeeAsync(Guid employeeId) {
         return await _dbContext.ProjectEmployees
             .Where(pe => pe.EmployeeId == employeeId)
+            .Include(pe => pe.Project)
+            .ThenInclude(p => p.CustomerCompany)
+            .Include(pe => pe.Project)
+            .ThenInclude(p => p.ContractorCompany)
+            .Include(pe => pe.Project)
+            .ThenInclude(p => p.ProjectManager)
             .Select(pe => pe.Project)
             .ToListAsync();
+    }
+
+    // Add ProjectEmployee entity
+    public void AddProjectEmployeeAsync(ProjectEmployee projectEmployee) {
+        _dbContext.ProjectEmployees.Add(projectEmployee);
+    }
+
+    // Remove EmployeeProject entity
+    public async Task RemoveProjectEmployeeAsync(Guid projectId, Guid employeeId) {
+        var entity = await _dbContext.ProjectEmployees
+            .FirstOrDefaultAsync(pe => pe.ProjectId == projectId && pe.EmployeeId == employeeId);
+        if (entity is not null) {
+            _dbContext.ProjectEmployees.Remove(entity);
+        }
     }
 
     public async Task AssignEmployeesToProjectAsync(Guid projectId, List<Guid> employeeIds) {

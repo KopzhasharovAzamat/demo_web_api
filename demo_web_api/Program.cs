@@ -10,6 +10,7 @@ using demo_web_api.DTOs.Company;
 using demo_web_api.DTOs.Project;
 using demo_web_api.DTOs.Employee;
 using demo_web_api.DTOs.ProjectEmployee;
+using demo_web_api.Mapping.AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(
     options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
+
+// Adding AutoMapper to DI container
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
 // Adding unit of work to DI container
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

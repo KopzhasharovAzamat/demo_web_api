@@ -1,4 +1,5 @@
-﻿using demo_web_api.BLL.Interfaces;
+﻿using AutoMapper;
+using demo_web_api.BLL.Interfaces;
 using demo_web_api.DAL.Entities;
 using demo_web_api.DTOs.Employee;
 using demo_web_api.DTOs.Project;
@@ -13,32 +14,22 @@ namespace demo_web_api.Controllers;
 public class ProjectsController : ControllerBase {
     private readonly IProjectService        _projectService;
     private readonly IValidator<ProjectDto> _projectValidator;
+    private readonly IMapper                _mapper;
 
-    public ProjectsController(IProjectService projectService, IValidator<ProjectDto> projectValidator) {
+    public ProjectsController(
+        IProjectService        projectService,
+        IValidator<ProjectDto> projectValidator,
+        IMapper                mapper
+    ) {
         _projectService   = projectService;
         _projectValidator = projectValidator;
+        _mapper           = mapper;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAllProjects() {
         var projects = await _projectService.GetAllProjectsAsync();
-        var result = projects.Select(
-            project => new ProjectVm {
-                Id                    = project.Id,
-                Name                  = project.Name,
-                CustomerCompanyId     = project.CustomerCompanyId,
-                CustomerCompanyName   = project.CustomerCompany?.Name,
-                ContractorCompanyId   = project.ContractorCompanyId,
-                ContractorCompanyName = project.ContractorCompany?.Name,
-                StartDate             = project.StartDate,
-                EndDate               = project.EndDate,
-                Priority              = project.Priority,
-                ProjectManagerId      = project.ProjectManagerId,
-                ProjectManagerName = project.ProjectManager != null ?
-                    $"{project.ProjectManager.LastName} {project.ProjectManager.FirstName}" :
-                    null
-            }
-        );
+        var result   = _mapper.Map<List<ProjectVm>>(projects);
 
         return Ok(result);
     }
@@ -49,18 +40,9 @@ public class ProjectsController : ControllerBase {
 
         if (project is null) return NotFound();
 
-        var foundProject = new ProjectVm {
-            Id                  = project.Id,
-            Name                = project.Name,
-            CustomerCompanyId   = project.CustomerCompanyId,
-            ContractorCompanyId = project.ContractorCompanyId,
-            StartDate           = project.StartDate,
-            EndDate             = project.EndDate,
-            Priority            = project.Priority,
-            ProjectManagerId    = project.ProjectManagerId
-        };
+        var result = _mapper.Map<ProjectVm>(project);
 
-        return Ok(foundProject);
+        return Ok(result);
     }
 
     [HttpPost]
@@ -70,16 +52,8 @@ public class ProjectsController : ControllerBase {
             return BadRequest(validationResult.Errors);
         }
 
-        var newProject = new Project {
-            Id                  = Guid.NewGuid(),
-            Name                = projectDto.Name,
-            CustomerCompanyId   = projectDto.CustomerCompanyId,
-            ContractorCompanyId = projectDto.ContractorCompanyId,
-            StartDate           = projectDto.StartDate,
-            EndDate             = projectDto.EndDate,
-            Priority            = projectDto.Priority,
-            ProjectManagerId    = projectDto.ProjectManagerId
-        };
+        var newProject = _mapper.Map<Project>(projectDto);
+        newProject.Id = Guid.NewGuid();
 
         await _projectService.AddProjectAsync(newProject);
 
@@ -98,13 +72,7 @@ public class ProjectsController : ControllerBase {
             return NotFound();
         }
 
-        existingProject.Name                = projectDto.Name;
-        existingProject.CustomerCompanyId   = projectDto.CustomerCompanyId;
-        existingProject.ContractorCompanyId = projectDto.ContractorCompanyId;
-        existingProject.StartDate           = projectDto.StartDate;
-        existingProject.EndDate             = projectDto.EndDate;
-        existingProject.Priority            = projectDto.Priority;
-        existingProject.ProjectManagerId    = projectDto.ProjectManagerId;
+        _mapper.Map(projectDto, existingProject);
 
         await _projectService.UpdateProjectAsync(existingProject);
 

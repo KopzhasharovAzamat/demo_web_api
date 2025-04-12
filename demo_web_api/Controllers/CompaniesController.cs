@@ -1,4 +1,5 @@
-﻿using demo_web_api.BLL.Interfaces;
+﻿using AutoMapper;
+using demo_web_api.BLL.Interfaces;
 using demo_web_api.DAL.Entities;
 using demo_web_api.DTOs.Company;
 using FluentValidation;
@@ -11,22 +12,22 @@ namespace demo_web_api.Controllers;
 public class CompaniesController : ControllerBase {
     private readonly ICompanyService        _companyService;
     private readonly IValidator<CompanyDto> _companyValidator;
+    private readonly IMapper                _mapper;
 
-    public CompaniesController(ICompanyService companyService, IValidator<CompanyDto> companyValidator) {
+    public CompaniesController(
+        ICompanyService        companyService,
+        IValidator<CompanyDto> companyValidator,
+        IMapper                mapper
+    ) {
         _companyService   = companyService;
         _companyValidator = companyValidator;
+        _mapper           = mapper;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAllCompanies() {
         var companies = await _companyService.GetAllCompaniesAsync();
-        var result = companies.Select(
-            company
-                => new CompanyVm {
-                    Id   = company.Id,
-                    Name = company.Name
-                }
-        );
+        var result    = _mapper.Map<List<CompanyVm>>(companies);
 
         return Ok(result);
     }
@@ -37,12 +38,9 @@ public class CompaniesController : ControllerBase {
 
         if (existingCompany is null) return NotFound();
 
-        var foundCompany = new CompanyVm() {
-            Id   = existingCompany.Id,
-            Name = existingCompany.Name
-        };
+        var result = _mapper.Map<CompanyVm>(existingCompany);
 
-        return Ok(foundCompany);
+        return Ok(result);
     }
 
     [HttpPost]
@@ -52,10 +50,8 @@ public class CompaniesController : ControllerBase {
             return BadRequest(validationResult.Errors);
         }
 
-        var newCompany = new Company {
-            Id   = Guid.NewGuid(),
-            Name = companyDto.Name
-        };
+        var newCompany = _mapper.Map<Company>(companyDto);
+        newCompany.Id = Guid.NewGuid();
 
         await _companyService.AddCompanyAsync(newCompany);
 
@@ -74,7 +70,8 @@ public class CompaniesController : ControllerBase {
             return NotFound();
         }
 
-        existingCompany.Name = companyDto.Name;
+        _mapper.Map(companyDto, existingCompany);
+
         await _companyService.UpdateCompanyAsync(existingCompany);
 
         return NoContent();

@@ -1,4 +1,5 @@
-﻿using demo_web_api.BLL.Interfaces;
+﻿using AutoMapper;
+using demo_web_api.BLL.Interfaces;
 using demo_web_api.DAL.Entities;
 using demo_web_api.DTOs.Employee;
 using FluentValidation;
@@ -11,24 +12,22 @@ namespace demo_web_api.Controllers;
 public class EmployeesController : ControllerBase {
     private readonly IEmployeeService        _employeeService;
     private readonly IValidator<EmployeeDto> _employeeValidator;
+    private readonly IMapper                 _mapper;
 
-    public EmployeesController(IEmployeeService employeeService, IValidator<EmployeeDto> employeeValidator) {
+    public EmployeesController(
+        IEmployeeService        employeeService,
+        IValidator<EmployeeDto> employeeValidator,
+        IMapper                 mapper
+    ) {
         _employeeService   = employeeService;
         _employeeValidator = employeeValidator;
+        _mapper            = mapper;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAllEmployees() {
         var employees = await _employeeService.GetAllEmployeesAsync();
-        var result = employees.Select(
-            employee => new EmployeeVm {
-                Id         = employee.Id,
-                FirstName  = employee.FirstName,
-                LastName   = employee.LastName,
-                MiddleName = employee.MiddleName,
-                Email      = employee.Email
-            }
-        );
+        var result    = _mapper.Map<List<EmployeeVm>>(employees);
 
         return Ok(result);
     }
@@ -39,15 +38,9 @@ public class EmployeesController : ControllerBase {
 
         if (existingEmployee is null) return NotFound();
 
-        var foundEmployee = new EmployeeVm() {
-            Id         = existingEmployee.Id,
-            FirstName  = existingEmployee.FirstName,
-            LastName   = existingEmployee.LastName,
-            MiddleName = existingEmployee.MiddleName,
-            Email      = existingEmployee.Email
-        };
+        var result = _mapper.Map<EmployeeVm>(existingEmployee);
 
-        return Ok(foundEmployee);
+        return Ok(result);
     }
 
     [HttpPost]
@@ -57,13 +50,9 @@ public class EmployeesController : ControllerBase {
             return BadRequest(validationResult.Errors);
         }
 
-        var newEmployee = new Employee {
-            Id         = Guid.NewGuid(),
-            LastName   = employeeDto.LastName,
-            FirstName  = employeeDto.FirstName,
-            MiddleName = employeeDto.MiddleName,
-            Email      = employeeDto.Email
-        };
+        var newEmployee = _mapper.Map<Employee>(employeeDto);
+        newEmployee.Id = Guid.NewGuid();
+
         await _employeeService.AddEmployeeAsync(newEmployee);
 
         return CreatedAtAction(nameof(GetEmployeeById), new { id = newEmployee.Id }, employeeDto);
@@ -81,10 +70,7 @@ public class EmployeesController : ControllerBase {
             return NotFound();
         }
 
-        existingEmployee.LastName   = employeeDto.LastName;
-        existingEmployee.FirstName  = employeeDto.FirstName;
-        existingEmployee.MiddleName = employeeDto.MiddleName;
-        existingEmployee.Email      = employeeDto.Email;
+        _mapper.Map(employeeDto, existingEmployee);
 
         await _employeeService.UpdateEmployeeAsync(existingEmployee);
 
