@@ -1,7 +1,7 @@
 ﻿using demo_web_api.DTOs.Project;
 using FluentValidation;
 
-namespace demo_web_api.Validation;
+namespace demo_web_api.Validation.Validators.Project;
 
 public class ProjectValidator : AbstractValidator<ProjectDto> {
     public ProjectValidator() {

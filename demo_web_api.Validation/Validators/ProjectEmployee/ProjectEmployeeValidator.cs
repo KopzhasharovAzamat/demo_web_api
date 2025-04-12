@@ -2,7 +2,7 @@
 using demo_web_api.DTOs.ProjectEmployee;
 using FluentValidation;
 
-namespace demo_web_api.Validation;
+namespace demo_web_api.Validation.Validators.ProjectEmployee;
 
 public class ProjectEmployeeValidator : AbstractValidator<ProjectEmployeeDto> {
     public ProjectEmployeeValidator(IUnitOfWork unitOfWork) {
@@ -19,8 +19,10 @@ public class ProjectEmployeeValidator : AbstractValidator<ProjectEmployeeDto> {
             .When(x => x is { ValidateForDelete: false });
 
         RuleFor(x => x)
-            .MustAsync(async (model, cancellation) =>
-                !await unitOfWork.ProjectEmployees.ExistsProjectEmployeeAsync(model.ProjectId, model.EmployeeId))
+            .MustAsync(
+                async (model, cancellation) =>
+                    !await unitOfWork.ProjectEmployees.ExistsProjectEmployeeAsync(model.ProjectId, model.EmployeeId)
+            )
             .WithMessage("This employee is already assigned to this project.")
             .When(x => x is { ValidateForDelete: false });
     }

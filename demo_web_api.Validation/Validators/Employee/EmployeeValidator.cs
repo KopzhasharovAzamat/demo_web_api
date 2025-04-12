@@ -2,7 +2,7 @@
 using demo_web_api.DTOs.Employee;
 using FluentValidation;
 
-namespace demo_web_api.Validation;
+namespace demo_web_api.Validation.Validators.Employee;
 
 public class EmployeeValidator : AbstractValidator<EmployeeDto> {
     public EmployeeValidator(IEmployeeService employeeService) {

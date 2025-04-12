@@ -1,7 +1,7 @@
 ﻿using demo_web_api.DTOs.Company;
 using FluentValidation;
 
-namespace demo_web_api.Validation;
+namespace demo_web_api.Validation.Validators.Company;
 
 public class CompanyValidator : AbstractValidator<CompanyDto> {
     public CompanyValidator() {

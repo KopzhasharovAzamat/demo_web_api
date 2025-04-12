@@ -17,6 +17,11 @@
     <ProjectReference Include="..\demo_web_api.DAL\demo_web_api.DAL.csproj" />
     <ProjectReference Include="..\demo_web_api.DTOs\demo_web_api.DTOs.csproj" />
     <ProjectReference Include="..\demo_web_api.Mapping\demo_web_api.Mapping.csproj" />
+    <ProjectReference Include="..\demo_web_api.Validation\demo_web_api.Validation.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>

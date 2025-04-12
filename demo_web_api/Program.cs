@@ -1,16 +1,19 @@
-using FluentValidation;
-using demo_web_api.Validation;
 using demo_web_api.BLL.Interfaces;
 using demo_web_api.BLL.Services;
 using demo_web_api.DAL.EntityFramework;
 using demo_web_api.DAL.Interfaces;
 using demo_web_api.DAL.Repositories;
-using Microsoft.EntityFrameworkCore;
 using demo_web_api.DTOs.Company;
-using demo_web_api.DTOs.Project;
 using demo_web_api.DTOs.Employee;
+using demo_web_api.DTOs.Project;
 using demo_web_api.DTOs.ProjectEmployee;
 using demo_web_api.Mapping.AutoMapper;
+using demo_web_api.Validation.Validators.Company;
+using demo_web_api.Validation.Validators.Employee;
+using demo_web_api.Validation.Validators.Project;
+using demo_web_api.Validation.Validators.ProjectEmployee;
+using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,13 +53,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Allowing front project to endpoints
-builder.Services.AddCors(options => {
-    options.AddDefaultPolicy(policy => {
-        policy.WithOrigins("http://localhost:5173")
-            .AllowAnyHeader()
-            .AllowAnyMethod();
-    });
-});
+builder.Services.AddCors(
+    options => {
+        options.AddDefaultPolicy(
+            policy => {
+                policy.WithOrigins("http://localhost:5173")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            }
+        );
+    }
+);
 
 var app = builder.Build();
 
