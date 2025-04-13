@@ -19,13 +19,6 @@ public class UpdateEmployeeValidator : AbstractValidator<UpdateEmployeeVm> {
 
         RuleFor(x => x.Email)
             .NotEmpty().WithMessage("Email is required.")
-            .EmailAddress().WithMessage("Invalid email address format.")
-            .MustAsync(
-                async (email, cancellation) => {
-                    var existing = await unitOfWork.Employees.GetEmployeeByEmailAsync(email);
-
-                    return existing is null;
-                }
-            ).WithMessage("Email must be unique.");
+            .EmailAddress().WithMessage("Invalid email address format.");
     }
 }
