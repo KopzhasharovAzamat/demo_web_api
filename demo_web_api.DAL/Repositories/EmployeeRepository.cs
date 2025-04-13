@@ -13,36 +13,33 @@ public class EmployeeRepository : IEmployeeRepository {
     }
 
     public async Task<List<Employee>> GetAllEmployeesAsync() {
-        return await _dbContext.Employees.ToListAsync();
+        return await _dbContext.Employees.AsNoTracking().ToListAsync();
     }
 
     public async Task<Employee?> GetEmployeeByIdAsync(Guid id) {
-        return await _dbContext.Employees.FirstOrDefaultAsync(x => x.Id == id);
+        return await _dbContext.Employees.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task AddEmployeeAsync(Employee employee) {
+    public async Task<Employee?> GetEmployeeByEmailAsync(string email) {
+        return await _dbContext.Employees.AsNoTracking().FirstOrDefaultAsync(x => x.Email == email);
+    }
+
+    public async Task<bool> EmployeeExistsAsync(Guid id) {
+        return await _dbContext.Employees.AnyAsync(x => x.Id == id);
+    }
+
+    public void AddEmployeeAsync(Employee employee) {
         _dbContext.Employees.Add(employee);
-        await _dbContext.SaveChangesAsync();
     }
 
-    public async Task UpdateEmployeeAsync(Employee employee) {
+    public void UpdateEmployeeAsync(Employee employee) {
         _dbContext.Employees.Update(employee);
-        await _dbContext.SaveChangesAsync();
     }
 
     public async Task DeleteEmployeeAsync(Guid id) {
         var employee = await _dbContext.Employees.FindAsync(id);
         if (employee != null) {
             _dbContext.Employees.Remove(employee);
-            await _dbContext.SaveChangesAsync();
         }
-    }
-
-    public async Task<Employee?> GetEmployeeByEmailAsync(string email) {
-        return await _dbContext.Employees.FirstOrDefaultAsync(x => x.Email == email);
-    }
-
-    public async Task<bool> EmployeeExistsAsync(Guid id) {
-        return await _dbContext.Employees.AnyAsync(x => x.Id == id);
     }
 }

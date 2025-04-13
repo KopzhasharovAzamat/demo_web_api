@@ -1,6 +1,6 @@
-﻿namespace demo_web_api.ViewModels;
+﻿namespace demo_web_api.DTOs.Project;
 
-public class ProjectDto {
+public class UpdateProjectVm {
     public string    Name                { get; set; }
     public Guid      CustomerCompanyId   { get; set; }
     public Guid      ContractorCompanyId { get; set; }

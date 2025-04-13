@@ -1,11 +1,11 @@
-﻿using demo_web_api.BLL.Interfaces;
-using demo_web_api.ViewModels;
+﻿using demo_web_api.DAL.Interfaces;
+using demo_web_api.DTOs.Employee;
 using FluentValidation;
 
-namespace demo_web_api.Validation;
+namespace demo_web_api.BLL.Validation.EmployeeValidators;
 
-public class EmployeeValidator : AbstractValidator<EmployeeDto> {
-    public EmployeeValidator(IEmployeeService employeeService) {
+public class UpdateEmployeeValidator : AbstractValidator<UpdateEmployeeVm> {
+    public UpdateEmployeeValidator(IUnitOfWork unitOfWork) {
         RuleFor(x => x.LastName)
             .NotEmpty().WithMessage("Last name is required.")
             .MaximumLength(100).WithMessage("Last name must be less 100 characters.");
@@ -19,13 +19,6 @@ public class EmployeeValidator : AbstractValidator<EmployeeDto> {
 
         RuleFor(x => x.Email)
             .NotEmpty().WithMessage("Email is required.")
-            .EmailAddress().WithMessage("Invalid email address format.")
-            .MustAsync(
-                async (email, cancellation) => {
-                    var existing = await employeeService.GetEmployeeByEmailAsync(email);
-
-                    return existing is null;
-                }
-            ).WithMessage("Email must be unique.");
+            .EmailAddress().WithMessage("Invalid email address format.");
     }
 }

@@ -1,6 +1,6 @@
-﻿namespace demo_web_api.ViewModels;
+﻿namespace demo_web_api.DTOs.Employee;
 
-public class EmployeeDto {
+public class UpdateEmployeeVm {
     public string FirstName  { get; set; }
     public string LastName   { get; set; }
     public string MiddleName { get; set; }

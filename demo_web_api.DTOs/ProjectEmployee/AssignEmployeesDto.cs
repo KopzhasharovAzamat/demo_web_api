@@ -1,4 +1,4 @@
-﻿namespace demo_web_api.DTOs;
+﻿namespace demo_web_api.DTOs.ProjectEmployee;
 
 public class AssignEmployeesDto {
     public Guid       ProjectId   { get; set; }

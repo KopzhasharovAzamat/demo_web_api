@@ -1,13 +1,18 @@
-using FluentValidation;
-using demo_web_api.Validation;
+using demo_web_api.BLL.AutoMapper;
 using demo_web_api.BLL.Interfaces;
 using demo_web_api.BLL.Services;
+using demo_web_api.BLL.Validation;
+using demo_web_api.BLL.Validation.CompanyValidators;
+using demo_web_api.BLL.Validation.EmployeeValidators;
+using demo_web_api.BLL.Validation.ProjectEmployeeValidators;
+using demo_web_api.BLL.Validation.ProjectValidators;
+using demo_web_api.DAL.Entities;
 using demo_web_api.DAL.EntityFramework;
 using demo_web_api.DAL.Interfaces;
 using demo_web_api.DAL.Repositories;
-using demo_web_api.DTOs;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using demo_web_api.ViewModels;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,40 +22,37 @@ builder.Services.AddDbContext<ApplicationDbContext>(
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
-// Adding unit of work to DI container
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+// Adding AutoMapper to DI container
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
+// Adding repositories and unit of work to DI container
+builder.Services.AddRepositories();
 
 // Adding validators to DI container
-builder.Services.AddScoped<IValidator<EmployeeDto>, EmployeeValidator>();
-builder.Services.AddScoped<IValidator<ProjectDto>, ProjectValidator>();
-builder.Services.AddScoped<IValidator<CompanyDto>, CompanyValidator>();
-builder.Services.AddScoped<IValidator<ProjectEmployeeDto>, ProjectEmployeeValidator>();
-
-// Adding repositories to DI container
-builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
-builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
-builder.Services.AddScoped<IProjectEmployeeRepository, ProjectEmployeeRepository>();
+builder.Services.AddValidators();
 
 // Adding services to DI container
-builder.Services.AddScoped<IProjectService, ProjectService>();
-builder.Services.AddScoped<IEmployeeService, EmployeeService>();
-builder.Services.AddScoped<ICompanyService, CompanyService>();
-builder.Services.AddScoped<IProjectEmployeeService, ProjectEmployeeService>();
+builder.Services.AddServices();
 
 // Adding controllers, swagger and endpoints explorer
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(
+    options => { options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles; }
+);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Allowing front project to endpoints
-builder.Services.AddCors(options => {
-    options.AddDefaultPolicy(policy => {
-        policy.WithOrigins("http://localhost:5173")
-            .AllowAnyHeader()
-            .AllowAnyMethod();
-    });
-});
+builder.Services.AddCors(
+    options => {
+        options.AddDefaultPolicy(
+            policy => {
+                policy.WithOrigins("http://localhost:5173")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            }
+        );
+    }
+);
 
 var app = builder.Build();
 

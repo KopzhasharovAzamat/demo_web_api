@@ -1,8 +1,5 @@
 ﻿using demo_web_api.BLL.Interfaces;
-using demo_web_api.DAL.Entities;
-using demo_web_api.PL.DTOs;
-using demo_web_api.ViewModels;
-using FluentValidation;
+using demo_web_api.DTOs.Employee;
 using Microsoft.AspNetCore.Mvc;
 
 namespace demo_web_api.Controllers;
@@ -10,88 +7,49 @@ namespace demo_web_api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 public class EmployeesController : ControllerBase {
-    private readonly IEmployeeService        _employeeService;
-    private readonly IValidator<EmployeeDto> _employeeValidator;
+    private readonly IEmployeeService _employeeService;
 
-    public EmployeesController(IEmployeeService employeeService, IValidator<EmployeeDto> employeeValidator) {
-        _employeeService   = employeeService;
-        _employeeValidator = employeeValidator;
+    public EmployeesController(
+        IEmployeeService employeeService
+    ) {
+        _employeeService = employeeService;
     }
 
+    // Get all employees
     [HttpGet]
     public async Task<IActionResult> GetAllEmployees() {
         var employees = await _employeeService.GetAllEmployeesAsync();
-        var result = employees.Select(
-            employee => new EmployeeVm {
-                Id         = employee.Id,
-                FirstName  = employee.FirstName,
-                LastName   = employee.LastName,
-                MiddleName = employee.MiddleName,
-                Email      = employee.Email
-            }
-        );
 
-        return Ok(result);
+        return Ok(employees);
     }
 
+    // Get employee by id
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetEmployeeById(Guid id) {
         var existingEmployee = await _employeeService.GetEmployeeByIdAsync(id);
 
         if (existingEmployee is null) return NotFound();
 
-        var foundEmployee = new EmployeeVm() {
-            Id         = existingEmployee.Id,
-            FirstName  = existingEmployee.FirstName,
-            LastName   = existingEmployee.LastName,
-            MiddleName = existingEmployee.MiddleName,
-            Email      = existingEmployee.Email
-        };
-
-        return Ok(foundEmployee);
+        return Ok(existingEmployee);
     }
 
+    // Create employee
     [HttpPost]
-    public async Task<IActionResult> CreateEmployee(EmployeeDto employeeDto) {
-        var validationResult = await _employeeValidator.ValidateAsync(employeeDto);
-        if (!validationResult.IsValid) {
-            return BadRequest(validationResult.Errors);
-        }
+    public async Task<IActionResult> CreateEmployee(AddEmployeeVm addEmployeeVm) {
+        var created = await _employeeService.AddEmployeeAsync(addEmployeeVm);
 
-        var newEmployee = new Employee {
-            Id         = Guid.NewGuid(),
-            LastName   = employeeDto.LastName,
-            FirstName  = employeeDto.FirstName,
-            MiddleName = employeeDto.MiddleName,
-            Email      = employeeDto.Email
-        };
-        await _employeeService.AddEmployeeAsync(newEmployee);
-
-        return CreatedAtAction(nameof(GetEmployeeById), new { id = newEmployee.Id }, employeeDto);
+        return CreatedAtAction(nameof(GetEmployeeById), new { id = created.Id }, created);
     }
 
+    // Update employee
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> UpdateEmployee(Guid id, EmployeeDto employeeDto) {
-        var validationResult = await _employeeValidator.ValidateAsync(employeeDto);
-        if (!validationResult.IsValid) {
-            return BadRequest(validationResult.Errors);
-        }
+    public async Task<IActionResult> UpdateEmployee(Guid id, UpdateEmployeeVm updateEmployeeVm) {
+        var updated = await _employeeService.UpdateEmployeeAsync(id, updateEmployeeVm);
 
-        var existingEmployee = await _employeeService.GetEmployeeByIdAsync(id);
-        if (existingEmployee is null) {
-            return NotFound();
-        }
-
-        existingEmployee.LastName   = employeeDto.LastName;
-        existingEmployee.FirstName  = employeeDto.FirstName;
-        existingEmployee.MiddleName = employeeDto.MiddleName;
-        existingEmployee.Email      = employeeDto.Email;
-
-        await _employeeService.UpdateEmployeeAsync(existingEmployee);
-
-        return NoContent();
+        return Ok(updated);
     }
 
+    // Delete employee
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteEmployee(Guid id) {
         await _employeeService.DeleteEmployeeAsync(id);

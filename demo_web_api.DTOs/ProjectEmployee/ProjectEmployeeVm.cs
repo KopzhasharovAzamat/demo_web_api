@@ -1,4 +1,4 @@
-﻿namespace demo_web_api.ViewModels;
+﻿namespace demo_web_api.DTOs.ProjectEmployee;
 
 public class ProjectEmployeeVm {
     public Guid      EmployeeId  { get; set; }
