@@ -5,6 +5,7 @@ namespace demo_web_api.BLL.Interfaces;
 
 public interface IProjectService {
     Task<List<Project>> GetAllProjectsAsync();
+    Task<List<Project>> GetFilteredProjectsAsync(ProjectQueryParameters parameters);
     Task<Project?> GetProjectByIdAsync(Guid id);
     Task<Project> AddProjectAsync(AddProjectVm addProjectVm);
     Task<Project> UpdateProjectAsync(Guid id, UpdateProjectVm updateProjectVm);

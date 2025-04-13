@@ -24,6 +24,13 @@ public class ProjectsController : ControllerBase {
         return Ok(projects);
     }
 
+    [HttpGet("filter")]
+    public async Task<IActionResult> GetFilteredProjects([FromQuery] ProjectQueryParameters parameters) {
+        var result = await _projectService.GetFilteredProjectsAsync(parameters);
+
+        return Ok(result);
+    }
+
     // Get project by id
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetProjectById(Guid id) {
@@ -62,7 +69,7 @@ public class ProjectsController : ControllerBase {
     [HttpGet("{projectId:guid}/employees")]
     public async Task<IActionResult> GetEmployeesByProject(Guid projectId) {
         var employees = await _projectService.GetEmployeesByProjectIdAsync(projectId);
-        
+
         return Ok(employees);
     }
 

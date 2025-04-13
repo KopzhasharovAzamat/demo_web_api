@@ -1,6 +1,7 @@
 ﻿using demo_web_api.DAL.Entities;
 using demo_web_api.DAL.EntityFramework;
 using demo_web_api.DAL.Interfaces;
+using demo_web_api.DTOs.Project;
 using Microsoft.EntityFrameworkCore;
 
 namespace demo_web_api.DAL.Repositories;
@@ -21,6 +22,48 @@ public class ProjectRepository : IProjectRepository {
             .ThenInclude(pe => pe.Employee)
             .AsNoTracking()
             .ToListAsync();
+    }
+
+    public async Task<List<Project>> GetFilteredProjectsAsync(ProjectQueryParameters parameters) {
+        var query = _dbContext.Projects
+            .Include(p => p.CustomerCompany)
+            .Include(p => p.ContractorCompany)
+            .Include(p => p.ProjectManager)
+            .Include(p => p.ProjectEmployees)
+            .ThenInclude(pe => pe.Employee)
+            .AsQueryable();
+
+        if (parameters.StartDateFrom.HasValue) {
+            query = query.Where(p => p.StartDate >= parameters.StartDateFrom.Value);
+        }
+
+        if (parameters.StartDateTo.HasValue) {
+            query = query.Where(p => p.StartDate <= parameters.StartDateTo.Value);
+        }
+
+        if (parameters.MinPriority.HasValue) {
+            query = query.Where(p => p.Priority >= parameters.MinPriority.Value);
+        }
+
+        if (parameters.MaxPriority.HasValue) {
+            query = query.Where(p => p.Priority <= parameters.MaxPriority.Value);
+        }
+
+        query = parameters.SortBy?.ToLower() switch {
+            "name" => parameters.Descending ? query.OrderByDescending(p => p.Name) : query.OrderBy(p => p.Name),
+            "startdate" => parameters.Descending ?
+                query.OrderByDescending(p => p.StartDate) :
+                query.OrderBy(p => p.StartDate),
+            "enddate" => parameters.Descending ?
+                query.OrderByDescending(p => p.EndDate) :
+                query.OrderBy(p => p.EndDate),
+            "priority" => parameters.Descending ?
+                query.OrderByDescending(p => p.Priority) :
+                query.OrderBy(p => p.Priority),
+            _ => query.OrderBy(p => p.Name) // default
+        };
+
+        return await query.AsNoTracking().ToListAsync();
     }
 
     public async Task<Project?> GetProjectByIdAsync(Guid id) {

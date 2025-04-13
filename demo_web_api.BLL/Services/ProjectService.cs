@@ -30,6 +30,10 @@ public class ProjectService : IProjectService {
         return await _unitOfWork.Projects.GetAllProjectsAsync();
     }
 
+    public async Task<List<Project>> GetFilteredProjectsAsync(ProjectQueryParameters parameters) {
+        return await _unitOfWork.Projects.GetFilteredProjectsAsync(parameters);
+    }
+
     // Get project by id
     public async Task<Project?> GetProjectByIdAsync(Guid id) {
         return await _unitOfWork.Projects.GetProjectByIdAsync(id);
