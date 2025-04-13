@@ -33,18 +33,14 @@ public class ProjectEmployeeController : ControllerBase {
     public async Task<IActionResult> GetEmployeesByProject(Guid projectId) {
         var employeesByProject = await _projectEmployeeService.GetEmployeesByProjectAsync(projectId);
 
-        var result = _mapper.Map<List<EmployeeVm>>(employeesByProject);
-
-        return Ok(result);
+        return Ok(employeesByProject);
     }
 
     [HttpGet("employee/{employeeId}")]
     public async Task<IActionResult> GetProjectsByEmployee(Guid employeeId) {
         var projectsByEmployee = await _projectEmployeeService.GetProjectsByEmployeeAsync(employeeId);
-
-        var result = _mapper.Map<List<ProjectVm>>(projectsByEmployee);
-
-        return Ok(result);
+        
+        return Ok(projectsByEmployee);
     }
 
     [HttpPost("assign")]

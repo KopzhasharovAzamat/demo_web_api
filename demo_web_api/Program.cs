@@ -12,6 +12,7 @@ using demo_web_api.DAL.Interfaces;
 using demo_web_api.DAL.Repositories;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,7 +35,9 @@ builder.Services.AddValidators();
 builder.Services.AddServices();
 
 // Adding controllers, swagger and endpoints explorer
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(
+    options => { options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles; }
+);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

@@ -65,17 +65,8 @@ public class ProjectsController : ControllerBase {
     [HttpGet("{projectId:guid}/employees")]
     public async Task<IActionResult> GetEmployeesByProject(Guid projectId) {
         var employees = await _projectService.GetEmployeesByProjectIdAsync(projectId);
-        var result = employees.Select(
-            e => new EmployeeVm {
-                Id         = e.Id,
-                LastName   = e.LastName,
-                FirstName  = e.FirstName,
-                MiddleName = e.MiddleName,
-                Email      = e.Email
-            }
-        );
-
-        return Ok(result);
+        
+        return Ok(employees);
     }
 
     // Add a list of employee to a project

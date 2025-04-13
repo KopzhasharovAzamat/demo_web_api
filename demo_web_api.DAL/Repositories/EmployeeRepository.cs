@@ -13,15 +13,15 @@ public class EmployeeRepository : IEmployeeRepository {
     }
 
     public async Task<List<Employee>> GetAllEmployeesAsync() {
-        return await _dbContext.Employees.ToListAsync();
+        return await _dbContext.Employees.AsNoTracking().ToListAsync();
     }
 
     public async Task<Employee?> GetEmployeeByIdAsync(Guid id) {
-        return await _dbContext.Employees.FirstOrDefaultAsync(x => x.Id == id);
+        return await _dbContext.Employees.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<Employee?> GetEmployeeByEmailAsync(string email) {
-        return await _dbContext.Employees.FirstOrDefaultAsync(x => x.Email == email);
+        return await _dbContext.Employees.AsNoTracking().FirstOrDefaultAsync(x => x.Email == email);
     }
 
     public async Task<bool> EmployeeExistsAsync(Guid id) {

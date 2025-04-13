@@ -13,11 +13,11 @@ public class CompanyRepository : ICompanyRepository {
     }
 
     public async Task<List<Company>> GetAllCompaniesAsync() {
-        return await _dbContext.Companies.ToListAsync();
+        return await _dbContext.Companies.AsNoTracking().ToListAsync();
     }
 
     public async Task<Company?> GetCompanyByIdAsync(Guid id) {
-        return await _dbContext.Companies.FirstOrDefaultAsync(x => x.Id == id);
+        return await _dbContext.Companies.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public void AddCompanyAsync(Company company) {

@@ -10,32 +10,14 @@ namespace demo_web_api.BLL.AutoMapper;
 public class MappingProfile : Profile {
     public MappingProfile() {
         // Map for Project
-        CreateMap<Project, ProjectVm>()
-            .ForMember(
-                dest => dest.ProjectManagerName,
-                opt => opt.MapFrom(
-                    src => src.ProjectManager != null ?
-                        $"{src.ProjectManager.LastName} {src.ProjectManager.FirstName}" :
-                        null
-                )
-            )
-            .ForMember(
-                dest => dest.CustomerCompanyName,
-                opt => opt.MapFrom(src => src.CustomerCompany.Name)
-            )
-            .ForMember(
-                dest => dest.ContractorCompanyName,
-                opt => opt.MapFrom(src => src.ContractorCompany.Name)
-            );
 
-        CreateMap<Project, ProjectDto>();
-        CreateMap<ProjectDto, Project>();
+        CreateMap<Project, AddProjectVm>();
+        CreateMap<AddProjectVm, Project>();
+
+        CreateMap<Project, UpdateProjectVm>();
+        CreateMap<UpdateEmployeeVm, Project>();
 
         // Map for Company
-        CreateMap<Company, CompanyDto>();
-        CreateMap<Company, CompanyVm>();
-        CreateMap<CompanyDto, Company>();
-
         CreateMap<Company, AddCompanyVm>();
         CreateMap<AddCompanyVm, Company>();
 
@@ -43,9 +25,11 @@ public class MappingProfile : Profile {
         CreateMap<UpdateCompanyVm, Company>();
 
         // Map for Employee
-        CreateMap<Employee, EmployeeVm>();
-        CreateMap<Employee, EmployeeDto>();
-        CreateMap<EmployeeDto, Employee>();
+        CreateMap<Employee, AddEmployeeVm>();
+        CreateMap<AddEmployeeVm, Employee>();
+
+        CreateMap<Employee, UpdateEmployeeVm>();
+        CreateMap<UpdateEmployeeVm, Employee>();
 
         // Map for ProjectEmployee
         CreateMap<ProjectEmployee, ProjectEmployeeVm>()

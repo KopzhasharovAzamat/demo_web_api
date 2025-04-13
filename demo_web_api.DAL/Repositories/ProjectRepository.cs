@@ -18,7 +18,8 @@ public class ProjectRepository : IProjectRepository {
             .Include(x => x.ContractorCompany)
             .Include(x => x.ProjectManager)
             .Include(x => x.ProjectEmployees)
-            .ThenInclude(x => x.Employee)
+            .ThenInclude(pe => pe.Employee)
+            .AsNoTracking()
             .ToListAsync();
     }
 
@@ -26,6 +27,7 @@ public class ProjectRepository : IProjectRepository {
         return await _dbContext.Projects
             .Include(x => x.ProjectEmployees)
             .ThenInclude(x => x.Employee)
+            .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id);
     }
 
@@ -34,6 +36,7 @@ public class ProjectRepository : IProjectRepository {
             .Where(pe => pe.ProjectId == projectId)
             .Include(pe => pe.Employee)
             .Select(pe => pe.Employee)
+            .AsNoTracking()
             .ToListAsync();
     }
 
