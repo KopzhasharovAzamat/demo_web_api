@@ -1,5 +1,4 @@
 ﻿using demo_web_api.BLL.Interfaces;
-using demo_web_api.DAL.Entities;
 using demo_web_api.DTOs.Employee;
 using Microsoft.AspNetCore.Mvc;
 

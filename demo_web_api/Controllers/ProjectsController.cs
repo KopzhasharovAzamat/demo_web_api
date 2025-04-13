@@ -1,7 +1,4 @@
-﻿using AutoMapper;
-using demo_web_api.BLL.Interfaces;
-using demo_web_api.DAL.Entities;
-using demo_web_api.DTOs.Employee;
+﻿using demo_web_api.BLL.Interfaces;
 using demo_web_api.DTOs.Project;
 using demo_web_api.DTOs.ProjectEmployee;
 using Microsoft.AspNetCore.Mvc;
