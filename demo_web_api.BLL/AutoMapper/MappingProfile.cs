@@ -31,6 +31,7 @@ public class MappingProfile : Profile {
         CreateMap<UpdateEmployeeVm, Employee>();
 
         // Map for ProjectEmployee
+        CreateMap<ProjectEmployeeDto, ProjectEmployee>();
         CreateMap<ProjectEmployee, ProjectEmployeeVm>()
             .ForMember(
                 dest => dest.FullName,

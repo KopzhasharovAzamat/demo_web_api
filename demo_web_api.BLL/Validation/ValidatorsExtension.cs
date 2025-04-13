@@ -2,10 +2,10 @@
 using demo_web_api.BLL.Validation.EmployeeValidators;
 using demo_web_api.BLL.Validation.ProjectEmployeeValidators;
 using demo_web_api.BLL.Validation.ProjectValidators;
-using demo_web_api.DAL.Entities;
 using demo_web_api.DTOs.Company;
 using demo_web_api.DTOs.Employee;
 using demo_web_api.DTOs.Project;
+using demo_web_api.DTOs.ProjectEmployee;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -26,7 +26,7 @@ public static class ValidatorsExtension {
         services.AddScoped<IValidator<UpdateCompanyVm>, UpdateCompanyValidator>();
 
         // ProjectEmployee
-        services.AddScoped<IValidator<ProjectEmployee>, ProjectEmployeeValidator>();
+        services.AddScoped<IValidator<ProjectEmployeeDto>, ProjectEmployeeDtoValidator>();
 
         return services;
     }
