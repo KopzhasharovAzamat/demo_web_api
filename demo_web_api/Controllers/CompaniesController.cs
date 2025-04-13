@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using demo_web_api.BLL.Interfaces;
-using demo_web_api.DAL.Entities;
+﻿using demo_web_api.BLL.Interfaces;
 using demo_web_api.DTOs.Company;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,16 +8,14 @@ namespace demo_web_api.Controllers;
 [Route("api/[controller]")]
 public class CompaniesController : ControllerBase {
     private readonly ICompanyService _companyService;
-    private readonly IMapper         _mapper;
 
     public CompaniesController(
-        ICompanyService companyService,
-        IMapper         mapper
+        ICompanyService companyService
     ) {
         _companyService = companyService;
-        _mapper         = mapper;
     }
 
+    // Get all companies
     [HttpGet]
     public async Task<IActionResult> GetAllCompanies() {
         var companies = await _companyService.GetAllCompaniesAsync();
@@ -27,6 +23,7 @@ public class CompaniesController : ControllerBase {
         return Ok(companies);
     }
 
+    // Get company by id
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetCompanyById(Guid id) {
         var foundCompany = await _companyService.GetCompanyByIdAsync(id);
@@ -36,6 +33,7 @@ public class CompaniesController : ControllerBase {
         return Ok(foundCompany);
     }
 
+    // Create company
     [HttpPost]
     public async Task<IActionResult> CreateCompany(AddCompanyVm vm) {
         var created = await _companyService.AddCompanyAsync(vm);
@@ -43,6 +41,7 @@ public class CompaniesController : ControllerBase {
         return CreatedAtAction(nameof(GetCompanyById), new { id = created.Id }, created);
     }
 
+    // Update company
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateCompany(Guid id, UpdateCompanyVm vm) {
         var updated = await _companyService.UpdateCompanyAsync(id, vm);
@@ -50,6 +49,7 @@ public class CompaniesController : ControllerBase {
         return Ok(updated);
     }
 
+    // Delete company
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteCompany(Guid id) {
         await _companyService.DeleteCompanyAsync(id);
