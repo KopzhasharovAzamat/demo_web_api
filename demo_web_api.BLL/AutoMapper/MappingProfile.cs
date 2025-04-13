@@ -10,12 +10,11 @@ namespace demo_web_api.BLL.AutoMapper;
 public class MappingProfile : Profile {
     public MappingProfile() {
         // Map for Project
-
         CreateMap<Project, AddProjectVm>();
         CreateMap<AddProjectVm, Project>();
 
         CreateMap<Project, UpdateProjectVm>();
-        CreateMap<UpdateEmployeeVm, Project>();
+        CreateMap<UpdateProjectVm, Project>();
 
         // Map for Company
         CreateMap<Company, AddCompanyVm>();
