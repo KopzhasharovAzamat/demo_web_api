@@ -11,20 +11,17 @@ namespace demo_web_api.BLL.Services;
 
 public class EmployeeService : IEmployeeService {
     private readonly IUnitOfWork                  _unitOfWork;
-    private readonly IValidator<Employee>         _employeeValidator;
     private readonly IValidator<AddEmployeeVm>    _addEmployeeValidator;
     private readonly IValidator<UpdateEmployeeVm> _updateEmployeeValidator;
     private readonly IMapper                      _mapper;
 
     public EmployeeService(
         IUnitOfWork                  unitOfWork,
-        IValidator<Employee>         employeeValidator,
         IValidator<AddEmployeeVm>    addEmployeeValidator,
         IValidator<UpdateEmployeeVm> updateEmployeeValidator,
         IMapper                      mapper
     ) {
         _unitOfWork              = unitOfWork;
-        _employeeValidator       = employeeValidator;
         _addEmployeeValidator    = addEmployeeValidator;
         _updateEmployeeValidator = updateEmployeeValidator;
         _mapper                  = mapper;
