@@ -19,8 +19,10 @@ public class AddProjectValidator : AbstractValidator<AddProjectVm> {
             .NotEmpty().WithMessage("Project manager is required.");
 
         RuleFor(x => x.StartDate)
-            .LessThanOrEqualTo(x => x.EndDate ?? DateTime.MaxValue)
+            .LessThanOrEqualTo(x => x.EndDate.Value)
+            .When(x => x.EndDate.HasValue)
             .WithMessage("Start date must be earlier than or equal to end date.");
+
 
         RuleFor(x => x.Priority)
             .InclusiveBetween(1, 5)
